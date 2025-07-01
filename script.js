@@ -1,11 +1,11 @@
 // Smooth scrolling for navigation links
 document.addEventListener('DOMContentLoaded', function() {
     // Handle other navigation links that don't exist yet (remove app handling since they have pages now)
-    const otherNavLinks = document.querySelectorAll('.nav-link[href="support.html"], .nav-link[href="about.html"], .nav-link[href="contact.html"], .nav-link[href="responsible-gambling.html"]');
+    const otherNavLinks = document.querySelectorAll('.nav-link[href="about.html"], .nav-link[href="contact.html"], .nav-link[href="responsible-gambling.html"]');
     otherNavLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
-            if (href !== 'privacy.html' && href !== 'terms.html' && href !== 'index.html' && href !== 'propify.html' && href !== 'fitiva.html' && href !== 'micro.html') {
+            if (href !== 'privacy.html' && href !== 'terms.html' && href !== 'index.html' && href !== 'propify.html' && href !== 'fitiva.html' && href !== 'micro.html' && href !== 'support.html') {
                 e.preventDefault();
                 const pageName = this.textContent;
                 alert(`${pageName} page is coming soon!\n\nWe're working hard to bring you this content. Please check back later.`);
