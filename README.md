@@ -2,7 +2,7 @@
 
 ## 🚀 Current Status: PRE-LAUNCH  
 
-This is the **marketing website** for Propify App LLC showcasing our upcoming AI-powered mobile applications. The apps are currently in development and **not yet available** in app stores.
+This is the **marketing website** for Propify App LLC showcasing our upcoming AI-powered mobile applications. The apps are currently in development and **not yet available** in app stores.   
 
 ## 📱 Upcoming Apps
 
