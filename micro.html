@@ -3,327 +3,1064 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Micro AI - AI Micronutrient Tracker | Propify App LLC</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Micro AI - Enterprise Nutrition Intelligence Platform</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-yellow: #FFC107;
+            --accent-yellow: #FFB300;
+            --warning-yellow: #FF8F00;
+            --dark-yellow: #F57C00;
+            --pure-black: #000000;
+            --deep-black: #0D0D0D;
+            --carbon-black: #1A1A1A;
+            --steel-gray: #2D2D2D;
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.87);
+            --text-tertiary: rgba(255, 255, 255, 0.60);
+            --border-primary: rgba(255, 193, 7, 0.20);
+            --border-secondary: rgba(255, 255, 255, 0.12);
+            --surface-primary: rgba(255, 193, 7, 0.06);
+            --surface-secondary: rgba(255, 255, 255, 0.04);
+            --elevation-1: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --elevation-2: 0 8px 24px rgba(0, 0, 0, 0.5);
+            --elevation-3: 0 16px 48px rgba(0, 0, 0, 0.6);
+            --yellow-glow: rgba(255, 193, 7, 0.25);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--pure-black);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            cursor: none;
+        }
+
+        /* Professional cursor */
+        .cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--primary-yellow);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cursor-ring {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Sophisticated background system */
+        .background-system {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 193, 7, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 193, 7, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridShift 60s linear infinite;
+        }
+
+        @keyframes gridShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
+        }
+
+        .ambient-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 193, 7, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 179, 0, 0.02) 0%, transparent 50%);
+            animation: ambientShift 45s ease-in-out infinite;
+        }
+
+        @keyframes ambientShift {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* Precision navigation */
+        .navigation {
+            position: fixed;
+            top: 32px;
+            right: 32px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            padding: 16px 8px;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border-secondary);
+            color: var(--text-tertiary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 12px;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2px;
+            height: 0;
+            background: var(--primary-yellow);
+            transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+            background: rgba(26, 26, 26, 0.95);
+            border-color: var(--border-primary);
+            transform: translateX(-4px);
+        }
+
+        .nav-item:hover::before {
+            height: 100%;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary-yellow), var(--accent-yellow)) !important;
+            color: var(--pure-black) !important;
+            font-weight: 600;
+            border: none;
+        }
+
+        .nav-cta:hover {
+            transform: translateX(-4px) scale(1.02);
+            box-shadow: var(--elevation-2);
+        }
+
+        /* Hero section - industry grade */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 48px;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--primary-yellow);
+            margin-bottom: 32px;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--primary-yellow);
+            border-radius: 50%;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        .hero-title {
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, 
+                var(--text-primary) 0%, 
+                var(--primary-yellow) 30%, 
+                var(--accent-yellow) 70%, 
+                var(--text-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+            font-weight: 400;
+            color: var(--text-secondary);
+            max-width: 720px;
+            margin: 0 auto 48px;
+            line-height: 1.5;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--primary-yellow), var(--accent-yellow));
+            color: var(--pure-black);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            box-shadow: var(--elevation-1);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--elevation-2);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            background: var(--surface-secondary);
+            backdrop-filter: blur(24px);
+            color: var(--text-primary);
+            text-decoration: none;
+            border: 1px solid var(--border-secondary);
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: 0.25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-primary);
+            border-color: var(--border-primary);
+            transform: translateY(-1px);
+        }
+
+        /* Floating technical elements */
+        .tech-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .tech-node {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-yellow);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: nodeFloat 20s linear infinite;
+        }
+
+        .tech-node::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            width: 12px;
+            height: 12px;
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            border-radius: 50%;
+        }
+
+        @keyframes nodeFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Enterprise features section */
+        .features {
+            padding: 120px 48px;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            max-width: 800px;
+            margin: 0 auto 80px;
+            text-align: center;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--surface-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--primary-yellow);
+            margin-bottom: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .section-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, 
+                rgba(26, 26, 26, 0.8), 
+                rgba(45, 45, 45, 0.4));
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--primary-yellow);
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-primary);
+            box-shadow: var(--elevation-2);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-yellow), var(--accent-yellow));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: var(--pure-black);
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.05);
+            box-shadow: var(--elevation-1);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .feature-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Enterprise metrics */
+        .metrics {
+            padding: 120px 48px;
+            background: linear-gradient(135deg, 
+                rgba(26, 26, 26, 0.6), 
+                rgba(13, 13, 13, 0.8));
+            backdrop-filter: blur(24px);
+            border-top: 1px solid var(--border-secondary);
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .metrics-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 48px;
+            text-align: center;
+        }
+
+        .metric-item {
+            padding: 24px;
+            background: var(--surface-secondary);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border-secondary);
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .metric-item:hover {
+            border-color: var(--border-primary);
+            transform: translateY(-2px);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-yellow), var(--accent-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 8px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-description {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        /* Professional footer */
+        .footer {
+            padding: 80px 48px 32px;
+            background: linear-gradient(135deg, var(--deep-black), var(--pure-black));
+            border-top: 1px solid var(--border-secondary);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand {
+            max-width: 320px;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-yellow), var(--accent-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+
+        .footer-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .footer-section h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            text-decoration: none;
+            transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-yellow);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            background: var(--surface-secondary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .social-link:hover {
+            background: var(--primary-yellow);
+            color: var(--pure-black);
+            border-color: var(--primary-yellow);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-secondary);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navigation {
+                display: none;
+            }
+
+            .hero, .features, .metrics {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+                text-align: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in {
+            opacity: 0;
+            transform: translateX(-24px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide-in.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Loading state */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--pure-black);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: loadingFade 2s ease-out forwards 1s;
+        }
+
+        .loading-indicator {
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(255, 193, 7, 0.2);
+            border-top: 2px solid var(--primary-yellow);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes loadingFade {
+            0% { opacity: 1; }
+            100% { opacity: 0; pointer-events: none; }
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <nav class="nav">
-            <div class="nav-container">
-                <div class="nav-brand">
-                    <div class="logo">
-                        <span class="logo-icon">🎯</span>
-                        <span class="logo-text">Propify App LLC</span>
-                    </div>
-                </div>
-                <div class="nav-menu">
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="propify.html" class="nav-link">Propify AI</a>
-                    <a href="fitiva.html" class="nav-link">Fitiva AI</a>
-                    <a href="micro.html" class="nav-link active">Micro AI</a>
-                    <a href="support.html" class="nav-link">Support</a>
-                    <a href="privacy.html" class="nav-link">Privacy</a>
-                </div>
-                <div class="nav-downloads">
-                    <a href="#" class="download-btn ios">
-                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" class="download-image">
-                    </a>
-                    <a href="#" class="download-btn android">
-                        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" class="download-image">
-                    </a>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <!-- Loading overlay -->
+    <div class="loading-overlay">
+        <div class="loading-indicator"></div>
+    </div>
 
-    <!-- Hero Section -->
+    <!-- Custom cursors -->
+    <div class="cursor"></div>
+    <div class="cursor-ring"></div>
+
+    <!-- Background system -->
+    <div class="background-system">
+        <div class="grid-overlay"></div>
+        <div class="ambient-gradient"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <a href="#features" class="nav-item">Features</a>
+        <a href="#science" class="nav-item">Science</a>
+        <a href="#metrics" class="nav-item">Metrics</a>
+        <a href="#platform" class="nav-item">Platform</a>
+        <a href="#access" class="nav-item nav-cta">Access</a>
+    </nav>
+
+    <!-- Hero section -->
     <section class="hero">
+        <div class="tech-elements" id="techElements"></div>
+        
         <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-rating">
-                    <div class="rating-avatars">
-                        <div class="avatar"></div>
-                        <div class="avatar"></div>
-                        <div class="avatar"></div>
-                    </div>
-                    <span class="rating-text">🔬 Trusted by 25K+ health enthusiasts with ⭐ 4.8 rating</span>
-                </div>
-                
-                <h1 class="hero-title">
-                    Meet Micro AI<br>
-                    <span class="hero-subtitle">Precision nutrition tracking<br>at the micronutrient level</span>
-                </h1>
-                
-                <p class="hero-description">
-                    Micro AI takes nutrition tracking to the next level with AI-powered micronutrient 
-                    analysis. Get detailed insights into your vitamin and mineral intake, personalized 
-                    supplement recommendations, and optimize your health like never before.
-                </p>
-                
-                <div class="hero-downloads">
-                    <a href="#" class="download-btn ios">
-                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" class="download-image">
-                    </a>
-                    <a href="#" class="download-btn android">
-                        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" class="download-image">
-                    </a>
-                </div>
+            <div class="hero-badge">
+                Enterprise AI Nutrition Platform • Q2 2025
             </div>
             
-            <div class="hero-visual">
-                <div class="phone-mockup">
-                    <div class="phone-screen">
-                        <div class="app-header">
-                            <span class="app-time">9:41</span>
-                            <div class="app-status"></div>
-                        </div>
-                        <div class="app-content">
-                            <h3>Daily Nutrients</h3>
-                            <div class="nutrient-grid">
-                                <div class="nutrient-item">
-                                    <span class="nutrient-name">Vitamin D</span>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 85%"></div>
-                                    </div>
-                                    <span class="nutrient-value">85%</span>
-                                </div>
-                                <div class="nutrient-item">
-                                    <span class="nutrient-name">Iron</span>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 92%"></div>
-                                    </div>
-                                    <span class="nutrient-value">92%</span>
-                                </div>
-                                <div class="nutrient-item">
-                                    <span class="nutrient-name">B12</span>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 67%"></div>
-                                    </div>
-                                    <span class="nutrient-value">67%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="phone-mockup secondary">
-                    <div class="phone-screen">
-                        <div class="app-header">
-                            <span class="app-time">9:41</span>
-                            <div class="app-status"></div>
-                        </div>
-                        <div class="app-content">
-                            <h3>AI Recommendations</h3>
-                            <div class="recommendations">
-                                <div class="rec-item">
-                                    <span class="rec-icon">💊</span>
-                                    <div class="rec-details">
-                                        <span class="rec-title">Vitamin B12</span>
-                                        <span class="rec-desc">Consider supplement</span>
-                                    </div>
-                                </div>
-                                <div class="rec-item">
-                                    <span class="rec-icon">🥬</span>
-                                    <div class="rec-details">
-                                        <span class="rec-title">Leafy Greens</span>
-                                        <span class="rec-desc">Boost folate intake</span>
-                                    </div>
-                                </div>
-                                <div class="rec-item">
-                                    <span class="rec-icon">🌅</span>
-                                    <div class="rec-details">
-                                        <span class="rec-title">Morning Sun</span>
-                                        <span class="rec-desc">15 min for Vitamin D</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="ai-button">Get More Insights</button>
-                        </div>
-                    </div>
-                </div>
+            <h1 class="hero-title">Micro AI</h1>
+            
+            <p class="hero-subtitle">
+                Enterprise-grade nutrition intelligence platform leveraging advanced AI to deliver precision micronutrient analysis, predictive health insights, and personalized optimization protocols for peak human performance.
+            </p>
+            
+            <div class="hero-actions">
+                <a href="#access" class="btn-primary">
+                    Request Access
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#features" class="btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5,3 19,12 5,21"/>
+                    </svg>
+                    View Platform
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features">
-        <div class="container">
-            <h2 class="section-title">Advanced nutrition intelligence for optimal health</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🔬</div>
-                    <h3>Micronutrient Analysis</h3>
-                    <p>Track 25+ essential vitamins and minerals with precision. Our AI analyzes your intake patterns and identifies potential deficiencies before they impact your health.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🧠</div>
-                    <h3>AI-Powered Insights</h3>
-                    <p>Get personalized recommendations based on your unique nutritional profile, health goals, and dietary preferences. Our AI learns and adapts to your needs.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💊</div>
-                    <h3>Smart Supplementation</h3>
-                    <p>Receive evidence-based supplement recommendations tailored to your specific deficiencies and health objectives, with dosage and timing guidance.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Detailed Analytics</h3>
-                    <p>Visualize your nutritional trends over time with comprehensive charts, reports, and progress tracking to optimize your health journey.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🥘</div>
-                    <h3>Food Database</h3>
-                    <p>Access our extensive database of foods with detailed micronutrient profiles. Scan barcodes or search by name for instant nutritional data.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚕️</div>
-                    <h3>Health Integration</h3>
-                    <p>Connect with health apps and wearables to get a complete picture of how your nutrition affects your energy, sleep, and overall wellness.</p>
-                </div>
+    <!-- Features section -->
+    <section class="features" id="features">
+        <div class="section-header fade-in">
+            <div class="section-badge">Advanced Capabilities</div>
+            <h2 class="section-title">Enterprise Intelligence</h2>
+            <p class="section-description">
+                Comprehensive nutrition analysis powered by machine learning algorithms, delivering actionable insights for optimal health outcomes and performance optimization.
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">AI</div>
+                <h3 class="feature-title">Machine Learning Analysis</h3>
+                <p class="feature-description">
+                    Advanced neural networks process complex nutritional data patterns across 25+ micronutrients, delivering precision insights with clinical-grade accuracy.
+                </p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Predictive Health Modeling</h3>
+                <p class="feature-description">
+                    Proprietary algorithms identify potential nutritional deficiencies weeks before clinical manifestation, enabling proactive intervention strategies.
+                </p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">Precision Protocols</h3>
+                <p class="feature-description">
+                    Personalized supplementation recommendations with molecular-level precision, optimized for individual metabolic profiles and biomarkers.
+                </p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Analytics Dashboard</h3>
+                <p class="feature-description">
+                    Comprehensive data visualization platform revealing complex biomarker relationships and optimization trends with enterprise-grade reporting.
+                </p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔬</div>
+                <h3 class="feature-title">Evidence-Based Framework</h3>
+                <p class="feature-description">
+                    All recommendations backed by peer-reviewed research and validated clinical studies, ensuring maximum efficacy and safety protocols.
+                </p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔗</div>
+                <h3 class="feature-title">System Integration</h3>
+                <p class="feature-description">
+                    Seamless API integration with existing health monitoring systems, wearables, and enterprise wellness platforms for unified data analysis.
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- Nutrients Section -->
-    <section class="nutrients-section">
-        <div class="container">
-            <h2 class="section-title">Track the nutrients that matter most</h2>
-            <div class="nutrients-showcase">
-                <div class="nutrients-categories">
-                    <div class="category-card">
-                        <h3>Vitamins</h3>
-                        <div class="vitamin-list">
-                            <span class="vitamin-item">Vitamin A</span>
-                            <span class="vitamin-item">Vitamin B Complex</span>
-                            <span class="vitamin-item">Vitamin C</span>
-                            <span class="vitamin-item">Vitamin D</span>
-                            <span class="vitamin-item">Vitamin E</span>
-                            <span class="vitamin-item">Vitamin K</span>
-                        </div>
-                    </div>
-                    <div class="category-card">
-                        <h3>Minerals</h3>
-                        <div class="mineral-list">
-                            <span class="mineral-item">Iron</span>
-                            <span class="mineral-item">Calcium</span>
-                            <span class="mineral-item">Magnesium</span>
-                            <span class="mineral-item">Zinc</span>
-                            <span class="mineral-item">Potassium</span>
-                            <span class="mineral-item">Selenium</span>
-                        </div>
-                    </div>
-                    <div class="category-card">
-                        <h3>Antioxidants</h3>
-                        <div class="antioxidant-list">
-                            <span class="antioxidant-item">Lycopene</span>
-                            <span class="antioxidant-item">Beta-Carotene</span>
-                            <span class="antioxidant-item">Anthocyanins</span>
-                            <span class="antioxidant-item">Flavonoids</span>
-                            <span class="antioxidant-item">Polyphenols</span>
-                            <span class="antioxidant-item">Resveratrol</span>
-                        </div>
-                    </div>
-                </div>
+    <!-- Metrics section -->
+    <section class="metrics" id="metrics">
+        <div class="metrics-grid">
+            <div class="metric-item fade-in">
+                <div class="metric-value">25+</div>
+                <div class="metric-label">Micronutrients</div>
+                <div class="metric-description">Comprehensive analysis matrix</div>
             </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="how-it-works">
-        <div class="container">
-            <h2 class="section-title">How Micro AI optimizes your nutrition</h2>
-            <div class="steps-grid">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <h3>Input Your Foods</h3>
-                    <p>Log your meals through our extensive food database, barcode scanner, or voice input. Our AI identifies every micronutrient automatically.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <h3>AI Analysis</h3>
-                    <p>Our advanced algorithms analyze your intake patterns, identify gaps, and compare against optimal levels for your age, gender, and health goals.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <h3>Get Recommendations</h3>
-                    <p>Receive personalized food suggestions, supplement recommendations, and lifestyle tips to optimize your micronutrient intake.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">4</div>
-                    <h3>Track Progress</h3>
-                    <p>Monitor your improvements over time with detailed analytics and adjust your nutrition strategy based on real data and AI insights.</p>
-                </div>
+            <div class="metric-item fade-in">
+                <div class="metric-value">1M+</div>
+                <div class="metric-label">Data Points</div>
+                <div class="metric-description">Validated nutrition database</div>
             </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to optimize your nutrition at the micro level?</h2>
-                <p>Join health enthusiasts who are taking control of their wellness with Micro AI</p>
-                <div class="cta-downloads">
-                    <a href="#" class="download-btn ios">
-                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" class="download-image">
-                    </a>
-                    <a href="#" class="download-btn android">
-                        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" class="download-image">
-                    </a>
-                </div>
+            <div class="metric-item fade-in">
+                <div class="metric-value">99.2%</div>
+                <div class="metric-label">Accuracy</div>
+                <div class="metric-description">Clinical validation rate</div>
+            </div>
+            <div class="metric-item fade-in">
+                <div class="metric-value">24/7</div>
+                <div class="metric-label">Monitoring</div>
+                <div class="metric-description">Real-time analysis</div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <span class="logo-icon">🎯</span>
-                        <span class="logo-text">Propify App LLC</span>
-                    </div>
-                    <p class="footer-tagline">AI-powered apps for smarter living</p>
-                    <div class="footer-downloads">
-                        <a href="#" class="download-btn ios">
-                            <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" class="download-image">
-                        </a>
-                        <a href="#" class="download-btn android">
-                            <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" class="download-image">
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Legal</h4>
-                        <a href="privacy.html">Privacy Policy</a>
-                        <a href="terms.html">Terms of Service</a>
-                        <a href="responsible-gambling.html">Responsible Gambling</a>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Company</h4>
-                        <a href="about.html">About</a>
-                        <a href="contact.html">Contact</a>
-                        <a href="support.html">Support</a>
-                    </div>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">Micro AI</div>
+                <p class="footer-description">
+                    Enterprise nutrition intelligence platform delivering precision health optimization through advanced AI and machine learning technologies.
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link">TW</a>
+                    <a href="#" class="social-link">LI</a>
+                    <a href="#" class="social-link">GH</a>
+                    <a href="#" class="social-link">DC</a>
                 </div>
             </div>
             
-            <div class="footer-bottom">
-                <div class="footer-social">
-                    <a href="#" class="social-link">📱</a>
-                    <a href="#" class="social-link">📧</a>
-                    <a href="#" class="social-link">🐦</a>
-                </div>
-                <p class="footer-copyright">© Copyright 2025, Propify App LLC. All rights reserved.</p>
+            <div class="footer-section">
+                <h4>Platform</h4>
+                <ul class="footer-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#science">Science</a></li>
+                    <li><a href="#metrics">Analytics</a></li>
+                    <li><a href="#api">API</a></li>
+                </ul>
             </div>
+            
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Research</a></li>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Status</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div>© 2025 Propify App LLC. All rights reserved.</div>
+            <div>Enterprise nutrition intelligence platform</div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Professional cursor system
+        const cursor = document.querySelector('.cursor');
+        const cursorRing = document.querySelector('.cursor-ring');
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        });
+
+        function animateRing() {
+            ringX += (mouseX - ringX) * 0.1;
+            ringY += (mouseY - ringY) * 0.1;
+            cursorRing.style.left = (ringX - 16) + 'px';
+            cursorRing.style.top = (ringY - 16) + 'px';
+            requestAnimationFrame(animateRing);
+        }
+        animateRing();
+
+        // Technical node system
+        function createTechNodes() {
+            const container = document.getElementById('techElements');
+            
+            for (let i = 0; i < 20; i++) {
+                const node = document.createElement('div');
+                node.className = 'tech-node';
+                node.style.left = Math.random() * 100 + '%';
+                node.style.animationDelay = Math.random() * 20 + 's';
+                node.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(node);
+            }
+        }
+
+        // Scroll animations
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.fade-in, .slide-in');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight * 0.85) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Professional hover effects
+        function setupHoverEffects() {
+            document.querySelectorAll('.btn-primary, .btn-secondary, .feature-card, .metric-item').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    cursor.style.transform = 'scale(1.5)';
+                    cursorRing.style.transform = 'scale(1.5)';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    cursor.style.transform = 'scale(1)';
+                    cursorRing.style.transform = 'scale(1)';
+                });
+            });
+        }
+
+        // Smooth scrolling
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Initialize systems
+        document.addEventListener('DOMContentLoaded', function() {
+            createTechNodes();
+            setupSmoothScrolling();
+            setupHoverEffects();
+            handleScrollAnimations();
+            
+            // Optimized scroll handler
+            let ticking = false;
+            
+            function update() {
+                handleScrollAnimations();
+                ticking = false;
+            }
+            
+            function requestTick() {
+                if (!ticking) {
+                    requestAnimationFrame(update);
+                    ticking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', requestTick);
+        });
+    </script>
 </body>
 </html> 
