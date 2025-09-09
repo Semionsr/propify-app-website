@@ -1,0 +1,15 @@
+# Redirect root domain to propify.html
+DirectoryIndex propify.html
+
+# Redirect index.html to propify.html
+RewriteEngine On
+RewriteCond %{THE_REQUEST} /index\.html[\s?] [NC]
+RewriteRule ^index\.html$ /propify.html [R=301,L]
+
+# Redirect root access to propify.html
+RewriteCond %{REQUEST_URI} ^/$
+RewriteRule ^$ /propify.html [R=301,L]
+
+# Optional: Force HTTPS (uncomment if needed)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
