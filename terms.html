@@ -4,135 +4,577 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service - Propify App LLC</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        .legal-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 120px 20px 80px;
+        /* CSS Custom Properties - Propify Design System */
+        :root {
+            /* Core Colors */
+            --primary-black: #000000;
+            --deep-black: #0a0a0a;
+            --charcoal-black: #1a1a1a;
+            --pure-white: #ffffff;
+            
+            /* Emerald Accent System */
+            --primary-emerald: #4ADE80;
+            --deep-emerald: #065F46;
+            --light-emerald: #6EE7B7;
+            --ultra-light-emerald: #A7F3D0;
+            
+            /* Status Colors */
+            --positive: #4ADE80;
+            --negative: #EF4444;
+            --neutral: #FCD34D;
+            --warning: #FB923C;
+            
+            /* Typography */
+            --font-ultra-light: 100;
+            --font-light: 300;
+            --font-regular: 400;
+            --font-medium: 500;
+            --font-semi-bold: 600;
+            --font-bold: 700;
+            --font-extra-bold: 800;
+            --font-black: 900;
+            
+            /* Shadows */
+            --shadow-emerald-light: 0 4px 16px rgba(74, 222, 128, 0.25);
+            --shadow-emerald-medium: 0 8px 24px rgba(74, 222, 128, 0.35);
+            --shadow-emerald-heavy: 0 12px 32px rgba(74, 222, 128, 0.45);
+            
+            /* Glass Effects */
+            --glass-bg: rgba(74, 222, 128, 0.12);
+            --glass-border: rgba(74, 222, 128, 0.25);
+            --glass-accent: rgba(74, 222, 128, 0.20);
         }
-        
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary-black);
+            color: var(--pure-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Infinity Symbol Background */
+        .infinity-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 0;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .infinity-symbol {
+            position: absolute;
+            width: 600px;
+            height: 300px;
+        }
+
+        .infinity-path {
+            fill: none;
+            stroke: var(--primary-emerald);
+            stroke-width: 1;
+            opacity: 0.3;
+            animation: infinityGlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes infinityGlow {
+            from {
+                stroke-width: 1;
+                opacity: 0.3;
+            }
+            to {
+                stroke-width: 2;
+                opacity: 0.5;
+            }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand-logo-container {
+            margin-right: 16px;
+        }
+
+        .brand-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--deep-emerald), var(--primary-emerald));
+            box-shadow: 0 6px 12px rgba(74, 222, 128, 0.4);
+            font-size: 20px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: 26px;
+            font-weight: var(--font-black);
+            color: var(--pure-white);
+            letter-spacing: -0.8px;
+            text-shadow: 0 2px 8px rgba(74, 222, 128, 0.5);
+        }
+
+        .brand-tagline {
+            font-size: 15px;
+            font-weight: var(--font-medium);
+            color: var(--ultra-light-emerald);
+            letter-spacing: 0.3px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: var(--pure-white);
+            text-decoration: none;
+            font-weight: var(--font-medium);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-emerald);
+            text-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+        }
+
+        .nav-downloads {
+            display: flex;
+            gap: 12px;
+        }
+
+        .download-btn {
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+
+        .download-image {
+            height: 40px;
+            width: auto;
+        }
+
+        /* Main Content */
+        .legal-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 140px 24px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
         .legal-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
+            animation: fadeInScale 1s ease-out;
         }
-        
+
         .legal-title {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: #1a1a1a;
+            font-size: 56px;
+            font-weight: var(--font-black);
+            margin-bottom: 20px;
+            color: var(--pure-white);
+            letter-spacing: -1.5px;
+            text-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
         }
-        
+
         .legal-subtitle {
-            font-size: 16px;
-            color: #64748b;
+            font-size: 18px;
+            font-weight: var(--font-medium);
+            color: var(--ultra-light-emerald);
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 12px 24px;
+            display: inline-block;
         }
-        
+
         .legal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 48px;
             line-height: 1.8;
+            animation: fadeInScale 1s ease-out 0.2s both;
         }
-        
+
         .legal-content h2 {
-            font-size: 28px;
-            font-weight: 600;
-            margin: 40px 0 20px;
-            color: #1a1a1a;
+            font-size: 32px;
+            font-weight: var(--font-bold);
+            margin: 48px 0 24px;
+            color: var(--primary-emerald);
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 8px rgba(74, 222, 128, 0.4);
         }
-        
+
+        .legal-content h2:first-child {
+            margin-top: 0;
+        }
+
         .legal-content h3 {
-            font-size: 20px;
-            font-weight: 600;
-            margin: 30px 0 15px;
-            color: #1a1a1a;
+            font-size: 24px;
+            font-weight: var(--font-semi-bold);
+            margin: 32px 0 16px;
+            color: var(--light-emerald);
         }
-        
+
         .legal-content p {
-            margin-bottom: 16px;
-            color: #374151;
+            margin-bottom: 20px;
+            color: #E5E7EB;
+            font-weight: var(--font-regular);
+            font-size: 16px;
         }
-        
+
         .legal-content ul {
-            margin: 16px 0;
-            padding-left: 24px;
+            margin: 20px 0;
+            padding-left: 32px;
         }
-        
+
         .legal-content li {
-            margin-bottom: 8px;
-            color: #374151;
+            margin-bottom: 12px;
+            color: #E5E7EB;
+            font-weight: var(--font-regular);
         }
-        
-        .contact-info {
-            background: #f8fafc;
-            padding: 24px;
-            border-radius: 12px;
+
+        .legal-content strong {
+            color: var(--primary-emerald);
+            font-weight: var(--font-semi-bold);
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, #92400E, #F59E0B);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 32px;
+            border-radius: 24px;
             margin: 40px 0;
-            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .warning-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        }
+
+        .warning-box h4 {
+            color: var(--pure-white);
+            margin: 0 0 12px 0;
+            font-weight: var(--font-bold);
+            font-size: 20px;
+        }
+
+        .warning-box p {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+            font-weight: var(--font-medium);
+        }
+
+        /* Contact Info Box */
+        .contact-info {
+            background: linear-gradient(135deg, var(--deep-emerald), var(--primary-emerald));
+            padding: 32px;
+            border-radius: 24px;
+            margin: 48px 0;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-emerald-medium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        }
+
         .contact-info h3 {
             margin-top: 0;
-            color: #22c55e;
+            margin-bottom: 16px;
+            color: var(--pure-white);
+            font-size: 24px;
+            font-weight: var(--font-bold);
         }
-        
+
+        .contact-info p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 16px;
+        }
+
         .contact-email {
-            color: #22c55e;
+            color: var(--pure-white);
             text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .contact-email:hover {
-            text-decoration: underline;
-        }
-        
-        .warning-box {
-            background: #fef3cd;
-            border: 1px solid #f6cc56;
-            padding: 20px;
+            font-weight: var(--font-semi-bold);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
             border-radius: 12px;
-            margin: 30px 0;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        
-        .warning-box h4 {
-            color: #8b5a00;
-            margin: 0 0 10px 0;
-            font-weight: 600;
+
+        .contact-email:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-        
-        .warning-box p {
-            color: #8b5a00;
-            margin: 0;
+
+        /* Animations */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--deep-black);
+            border-top: 1px solid var(--glass-border);
+            padding: 80px 0 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 80px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .footer-brand .brand-name {
+            font-size: 24px;
+        }
+
+        .footer-tagline {
+            font-size: 16px;
+            color: var(--ultra-light-emerald);
+            font-weight: var(--font-medium);
+        }
+
+        .footer-downloads {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .footer-column h4 {
+            font-size: 18px;
+            font-weight: var(--font-bold);
+            color: var(--primary-emerald);
+            margin-bottom: 16px;
+        }
+
+        .footer-column a {
+            display: block;
+            color: #E5E7EB;
+            text-decoration: none;
+            margin-bottom: 12px;
+            font-weight: var(--font-medium);
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary-emerald);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 40px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-link {
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary-emerald);
+            border-color: var(--primary-emerald);
+            transform: translateY(-2px);
+        }
+
+        .footer-copyright {
+            color: #9CA3AF;
+            font-weight: var(--font-medium);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 12px 16px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .nav-downloads {
+                gap: 8px;
+            }
+            
+            .download-image {
+                height: 32px;
+            }
+            
+            .legal-container {
+                padding: 120px 16px 60px;
+            }
+            
+            .legal-title {
+                font-size: 36px;
+            }
+            
+            .legal-content {
+                padding: 32px 24px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Infinity Symbol Background -->
+    <div class="infinity-container">
+        <svg class="infinity-symbol" viewBox="0 0 600 300">
+            <path class="infinity-path" d="M 300 75 C 240 75, 240 105, 300 150 C 360 195, 360 225, 300 225 C 240 225, 240 195, 300 150 C 360 105, 360 75, 300 75 Z"/>
+        </svg>
+    </div>
+
     <!-- Header -->
     <header class="header">
-        <nav class="nav">
-            <div class="nav-container">
-                <div class="nav-brand">
-                    <div class="logo">
-                        <span class="logo-icon">🎯</span>
-                        <span class="logo-text">Propify App LLC</span>
-                    </div>
+        <nav class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-logo-container">
+                    <div class="brand-logo">🎯</div>
                 </div>
-                <div class="nav-menu">
-                    <a href="index.html" class="nav-link">Home</a>
-                    <a href="#" class="nav-link" data-app="propify">Propify AI</a>
-                    <a href="#" class="nav-link" data-app="fitiva">Fitiva AI</a>
-                    <a href="#" class="nav-link" data-app="micro">Micro AI</a>
-                    <a href="support.html" class="nav-link">Support</a>
-                    <a href="privacy.html" class="nav-link">Privacy</a>
+                <div class="brand-text">
+                    <div class="brand-name">Propify App LLC</div>
+                    <div class="brand-tagline">AI-powered apps for smarter living</div>
                 </div>
-                <div class="nav-downloads">
-                    <a href="#" class="download-btn ios">
-                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" class="download-image">
-                    </a>
-                    <a href="#" class="download-btn android">
-                        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" class="download-image">
-                    </a>
-                </div>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="propify.html" class="nav-link">Propify AI</a>
+                <a href="fitiva.html" class="nav-link">Fitiva AI</a>
+                <a href="micro.html" class="nav-link">Micro AI</a>
+                <a href="support.html" class="nav-link">Support</a>
+                <a href="privacy.html" class="nav-link">Privacy</a>
+            </div>
+            <div class="nav-downloads">
+                <a href="#" class="download-btn ios">
+                    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" class="download-image">
+                </a>
+                <a href="#" class="download-btn android">
+                    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" class="download-image">
+                </a>
             </div>
         </nav>
     </header>
@@ -329,14 +771,18 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
+        <div class="footer-container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <div class="logo">
-                        <span class="logo-icon">🎯</span>
-                        <span class="logo-text">Propify App LLC</span>
+                    <div class="nav-brand">
+                        <div class="brand-logo-container">
+                            <div class="brand-logo">🎯</div>
+                        </div>
+                        <div class="brand-text">
+                            <div class="brand-name">Propify App LLC</div>
+                            <div class="footer-tagline">AI-powered apps for smarter living</div>
+                        </div>
                     </div>
-                    <p class="footer-tagline">AI-powered apps for smarter living</p>
                     <div class="footer-downloads">
                         <a href="#" class="download-btn ios">
                             <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" class="download-image">
@@ -352,13 +798,14 @@
                         <h4>Legal</h4>
                         <a href="privacy.html">Privacy Policy</a>
                         <a href="terms.html">Terms of Service</a>
-                        <a href="responsible-gambling.html">Responsible Gambling</a>
+                        <a href="support.html">Support</a>
                     </div>
                     <div class="footer-column">
                         <h4>Company</h4>
-                        <a href="about.html">About</a>
-                        <a href="contact.html">Contact</a>
-                        <a href="support.html">Support</a>
+                        <a href="index.html">Home</a>
+                        <a href="propify.html">Propify AI</a>
+                        <a href="fitiva.html">Fitiva AI</a>
+                        <a href="micro.html">Micro AI</a>
                     </div>
                 </div>
             </div>
@@ -373,7 +820,5 @@
             </div>
         </div>
     </footer>
-
-    <script src="script.js"></script>
 </body>
-</html> 
+</html>
