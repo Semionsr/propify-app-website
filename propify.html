@@ -213,11 +213,53 @@
         .header {
             position: sticky;
             top: 0;
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-subtle);
             z-index: 1000;
+            /* Liquid glass: the SVG displacement warps the BACKDROP, not the bar.
+               brightness + blur then sit on top of the warp. */
+            background: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.10) 0%,
+                rgba(255, 255, 255, 0.04) 55%,
+                rgba(255, 255, 255, 0.07) 100%
+            );
+            backdrop-filter: brightness(1.08) saturate(180%) blur(22px) url(#propify-liquid-glass);
+            -webkit-backdrop-filter: brightness(1.08) saturate(180%) blur(22px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.42),
+                inset 0 1px 0 rgba(255, 255, 255, 0.22);
+            /* Square on purpose. */
+            border-radius: 0;
+        }
+        /* Inset glow rim - the ::before from their .polidario-card. */
+        .header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            border-radius: inherit;
+            box-shadow:
+                inset 6px 6px 0 -6px rgba(255, 255, 255, 0.35),
+                inset 0 0 8px 1px rgba(255, 255, 255, 0.18);
+        }
+        .header > * { position: relative; z-index: 1; }
+        /* Specular sheen across the top edge. */
+        .header::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; top: 0;
+            height: 1px;
+            pointer-events: none;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255,255,255,.55) 22%,
+                rgba(255,255,255,.20) 52%,
+                rgba(255,255,255,.45) 78%,
+                transparent 100%);
+        }
+        @supports not (backdrop-filter: blur(1px)) {
+            .header { background: rgba(10, 10, 10, 0.92); }
         }
 
         .nav-container {
@@ -252,11 +294,15 @@
         }
 
         .brand-name {
-            font-family: var(--font-serif);
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
+            font-family: var(--font-sans);
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.045em;
+            background: linear-gradient(180deg, #ffffff 18%, rgba(255,255,255,.62) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
         }
 
         .nav-menu {
@@ -4014,6 +4060,19 @@
     </div>
 
     <!-- Header -->
+    <!-- Liquid glass displacement map. Ported from the ScaleConnect build
+         (#polidario-displacement): feTurbulence + feDisplacementMap applied
+         inside backdrop-filter so it warps what is behind the nav bar. -->
+    <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+      <defs>
+        <filter id="propify-liquid-glass">
+          <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="2" result="turbulence" />
+          <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="180"
+                             xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
     <header class="header">
         <nav class="nav-container">
             <a href="index.html" class="nav-brand">
