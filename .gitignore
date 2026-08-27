@@ -1,0 +1,13 @@
+# Server-side file — contains a live Gemini API key fallback.
+# Belongs in the propify-nfl-agent Vercel project, not this public Pages repo.
+nba-chat-v3.js
+
+# Vercel function config copied from the app repo. This site is GitHub Pages,
+# and the api/ folder it references does not exist here.
+vercel.json
+
+# Internal auth debug panel — not for public hosting.
+auth-test.html
+
+.DS_Store
+node_modules/

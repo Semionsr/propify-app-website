@@ -1,0 +1,2064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Propify AI - Get Started</title>
+    
+    <!-- Typography: Source Serif Pro (headlines) + Inter (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+    <!-- Auth Helper -->
+    <script src="auth-helper.js"></script>
+    
+    <style>
+        /* CSS Reset & Custom Properties */
+        :root {
+            /* Dark Theme Colors */
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #141414;
+            --bg-card: #0f0f0f;
+            --bg-card-hover: #1a1a1a;
+            --bg-elevated: #1c1c1c;
+            
+            /* Text Colors */
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-tertiary: #71717a;
+            --text-muted: #52525b;
+            
+            /* Emerald Accent System */
+            --emerald-50: #ecfdf5;
+            --emerald-100: #d1fae5;
+            --emerald-200: #a7f3d0;
+            --emerald-300: #6ee7b7;
+            --emerald-400: #34d399;
+            --emerald-500: #10b981;
+            --emerald-600: #059669;
+            --emerald-700: #047857;
+            --emerald-800: #065f46;
+            --emerald-900: #064e3b;
+            
+            /* Primary Brand */
+            --primary: #4ADE80;
+            --primary-dark: #22c55e;
+            --primary-light: #86efac;
+            
+            /* Borders - Sharper */
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-default: rgba(255, 255, 255, 0.12);
+            --border-strong: rgba(255, 255, 255, 0.18);
+            --border-emerald: rgba(74, 222, 128, 0.4);
+            
+            /* Typography */
+            --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.6);
+            --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.7);
+            --shadow-emerald: 0 0 30px rgba(74, 222, 128, 0.12);
+            --shadow-emerald-strong: 0 0 50px rgba(74, 222, 128, 0.2);
+            
+            /* Border Radius */
+            --radius-xs: 4px;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-full: 9999px;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 600ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Dotted background pattern */
+        .dotted-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .dotted-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at center, rgba(74, 222, 128, 0.06) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.4;
+        }
+
+        /* Vertical lines */
+        .vertical-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 10%;
+        }
+
+        .vertical-line {
+            width: 1px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        /* Confetti Container */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            opacity: 0;
+        }
+
+        .confetti.active {
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(-100vh) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* Skip Button - Top Right */
+        .skip-button {
+            position: fixed;
+            top: 32px;
+            right: 32px;
+            z-index: 60;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            font-family: inherit;
+        }
+
+        .skip-button:hover {
+            color: var(--text-tertiary);
+            background: var(--bg-card-hover);
+            border-color: var(--border-default);
+        }
+
+        /* Navigation Arrows */
+        .nav-arrows {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 50;
+            pointer-events: none;
+            padding: 0 32px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nav-arrow {
+            width: 56px;
+            height: 56px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .nav-arrow.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .nav-arrow:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-emerald);
+        }
+
+        .nav-arrow i {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Horizontal Scroll Container */
+        .scroll-container {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            display: flex;
+            padding-bottom: 120px; /* Space for timeline */
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .scroll-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Individual Step */
+        .step {
+            min-width: 100vw;
+            height: 100%;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            padding: 0 80px;
+            position: relative;
+        }
+
+        /* Asymmetric Layout: 40% Content | 60% Visual */
+        .step-inner {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 80px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Content Side (40%) */
+        .step-content {
+            flex: 0 0 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-right: 40px;
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step.in-view .step-content {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .step-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        .step-title {
+            font-family: var(--font-serif);
+            font-size: clamp(36px, 4vw, 56px);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .step-title em {
+            font-style: italic;
+            color: var(--primary);
+        }
+
+        .step-description {
+            font-size: 17px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 40px;
+            max-width: 520px;
+        }
+
+        /* Visual Side (60%) */
+        .step-visual {
+            flex: 0 0 55%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(60px) scale(0.95);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        }
+
+        .step.in-view .step-visual {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+
+        /* Welcome Logo */
+        .welcome-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 36px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-emerald-strong), 0 0 80px rgba(74, 222, 128, 0.3);
+            border: 2px solid var(--border-emerald);
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+
+        .welcome-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Feature Pills */
+        .feature-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .feature-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all var(--transition-base);
+        }
+
+        .feature-pill:hover {
+            border-color: var(--border-emerald);
+            transform: translateY(-2px);
+        }
+
+        .feature-pill i {
+            width: 18px;
+            height: 18px;
+            color: var(--primary);
+        }
+
+        /* Showcase Card */
+        .showcase-card {
+            width: 100%;
+            max-width: 520px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-xl), var(--shadow-emerald);
+            transition: all var(--transition-base);
+        }
+
+        .showcase-card:hover {
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-xl), 0 0 60px rgba(74, 222, 128, 0.25);
+        }
+
+        .showcase-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 22px;
+            border-bottom: 1px solid var(--border-subtle);
+            background: var(--bg-tertiary);
+        }
+
+        .showcase-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .showcase-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--primary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+        }
+
+        .showcase-icon i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .showcase-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+
+        .showcase-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(74, 222, 128, 0.12);
+            border: 1px solid var(--border-emerald);
+            color: var(--primary);
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .showcase-badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .showcase-content {
+            padding: 24px;
+        }
+
+        /* AI Chat Showcase */
+        .chat-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-message {
+            max-width: 90%;
+            padding: 16px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: var(--bg-primary);
+            font-weight: 500;
+        }
+
+        .chat-message.ai {
+            align-self: flex-start;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
+        }
+
+        /* Analysis Showcase */
+        .analysis-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .player-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .player-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+        }
+
+        .player-avatar i {
+            width: 24px;
+            height: 24px;
+        }
+
+        .player-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .player-name {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+        }
+
+        .player-team {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .player-score {
+            text-align: right;
+        }
+
+        .score-value {
+            font-family: var(--font-serif);
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .stat-item {
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            padding: 14px 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .confidence-bar {
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            padding: 16px 18px;
+        }
+
+        .confidence-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .confidence-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .confidence-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .confidence-track {
+            height: 10px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-xs);
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: var(--radius-xs);
+            width: 0%;
+            animation: fillGrow 1.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes fillGrow {
+            to { width: 87%; }
+        }
+
+        /* Heatmap Showcase */
+        .heatmap-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+        }
+
+        .heat-cell {
+            aspect-ratio: 1;
+            border-radius: var(--radius-xs);
+            transition: all var(--transition-fast);
+        }
+
+        .heat-cell:hover {
+            transform: scale(1.1);
+        }
+
+        .heat-cell.low { background: rgba(74, 222, 128, 0.12); }
+        .heat-cell.medium { background: rgba(74, 222, 128, 0.28); }
+        .heat-cell.high { background: rgba(74, 222, 128, 0.48); }
+        .heat-cell.very-high { background: rgba(74, 222, 128, 0.7); }
+        .heat-cell.hot { background: var(--primary); }
+
+        .heatmap-legend {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: var(--radius-xs);
+        }
+
+        .heatmap-insight {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: rgba(74, 222, 128, 0.08);
+            border: 1px solid var(--border-emerald);
+            border-radius: var(--radius-sm);
+        }
+
+        .insight-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--primary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+            flex-shrink: 0;
+        }
+
+        .insight-icon i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .insight-content {
+            text-align: left;
+        }
+
+        .insight-content h5 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 3px;
+        }
+
+        .insight-content p {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        /* Sports Selection */
+        .sports-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .sport-option {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 24px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .sport-option:hover {
+            border-color: var(--border-strong);
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+        }
+
+        .sport-option.selected {
+            border-color: var(--primary);
+            background: rgba(74, 222, 128, 0.06);
+            box-shadow: var(--shadow-emerald);
+        }
+
+        .sport-option-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            background: var(--bg-tertiary);
+            transition: all var(--transition-base);
+        }
+
+        .sport-option.selected .sport-option-icon {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .sport-option-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .sport-option-check {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: var(--radius-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all var(--transition-fast);
+        }
+
+        .sport-option.selected .sport-option-check {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .sport-option-check i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .selection-hint {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 16px;
+        }
+
+        /* Final Step - Celebration */
+        .celebration-icon {
+            width: 140px;
+            height: 140px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-emerald-strong), 0 0 100px rgba(74, 222, 128, 0.4);
+            animation: rocketFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes rocketFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .celebration-icon i {
+            width: 64px;
+            height: 64px;
+            color: var(--bg-primary);
+        }
+
+        .final-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .final-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            padding: 24px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-md);
+            text-align: center;
+            transition: all var(--transition-base);
+        }
+
+        .final-feature:hover {
+            border-color: var(--border-strong);
+            transform: translateY(-4px);
+        }
+
+        .final-feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(74, 222, 128, 0.12);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .final-feature-icon i {
+            width: 22px;
+            height: 22px;
+        }
+
+        .final-feature h4 {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .final-feature p {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            line-height: 1.4;
+        }
+
+        /* Action Buttons */
+        .step-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        .btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--bg-primary);
+            box-shadow: 0 4px 20px rgba(74, 222, 128, 0.25);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 28px rgba(74, 222, 128, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-default);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            border-color: var(--border-strong);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-muted);
+            padding: 14px;
+        }
+
+        .btn-ghost:hover {
+            color: var(--text-tertiary);
+        }
+
+        /* Sign In Divider */
+        .signin-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+            margin: 6px 0;
+        }
+
+        .signin-divider::before,
+        .signin-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-default);
+        }
+
+        .signin-divider span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Legal Text */
+        .legal-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            padding-top: 12px;
+        }
+
+        .legal-text a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+        }
+
+        .legal-text a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        /* HORIZONTAL TIMELINE - Bottom of Screen */
+        .timeline-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 55;
+            padding: 32px 80px 36px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .timeline-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-track {
+            position: relative;
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-xs);
+            margin-bottom: 20px;
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-xs);
+            transition: width var(--transition-smooth);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+        }
+
+        .timeline-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            flex: 1;
+            position: relative;
+        }
+
+        .timeline-step-dot {
+            width: 16px;
+            height: 16px;
+            background: var(--bg-card);
+            border: 2px solid var(--border-default);
+            border-radius: 50%;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+            transition: all var(--transition-base);
+            transform: translateY(-10px);
+        }
+
+        .timeline-step.completed .timeline-step-dot {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.6);
+        }
+
+        .timeline-step.active .timeline-step-dot {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(74, 222, 128, 0.8);
+            animation: timelinePulse 2s infinite;
+        }
+
+        @keyframes timelinePulse {
+            0%, 100% { transform: translateY(-10px) scale(1); }
+            50% { transform: translateY(-10px) scale(1.15); }
+        }
+
+        .timeline-step:hover .timeline-step-dot {
+            transform: translateY(-10px) scale(1.2);
+            border-color: var(--primary);
+        }
+
+        .timeline-step-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .timeline-step-number {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all var(--transition-base);
+        }
+
+        .timeline-step.active .timeline-step-number,
+        .timeline-step.completed .timeline-step-number {
+            color: var(--primary);
+        }
+
+        .timeline-step-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            text-align: center;
+            transition: all var(--transition-base);
+            white-space: nowrap;
+        }
+
+        .timeline-step.active .timeline-step-title {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .timeline-step:hover .timeline-step-title {
+            color: var(--text-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .step {
+                padding: 0 60px;
+            }
+
+            .step-inner {
+                gap: 60px;
+            }
+
+            .step-title {
+                font-size: clamp(32px, 4vw, 48px);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .step-inner {
+                flex-direction: column;
+                justify-content: center;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .step-content {
+                flex: 1;
+                padding-right: 0;
+                align-items: center;
+            }
+
+            .step-visual {
+                flex: 1;
+            }
+
+            .step-description {
+                text-align: center;
+            }
+
+            .sports-grid,
+            .final-features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .step {
+                padding: 0 32px;
+            }
+
+            .nav-arrows {
+                padding: 0 16px;
+            }
+
+            .nav-arrow {
+                width: 48px;
+                height: 48px;
+            }
+
+            .skip-button {
+                top: 20px;
+                right: 20px;
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .step-title {
+                font-size: 32px;
+            }
+
+            .step-description {
+                font-size: 15px;
+            }
+
+            .timeline-container {
+                padding: 20px 32px 24px;
+            }
+
+            .timeline-step-title {
+                font-size: 11px;
+            }
+
+            .timeline-step-number {
+                font-size: 9px;
+            }
+
+            .showcase-card {
+                max-width: 100%;
+            }
+
+            .sports-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .final-features {
+                grid-template-columns: 1fr;
+                max-width: 360px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .step {
+                padding: 0 20px;
+            }
+
+            .step-title {
+                font-size: 28px;
+            }
+
+            .btn {
+                padding: 14px 24px;
+                font-size: 14px;
+            }
+
+            .timeline-container {
+                padding: 16px 20px 20px;
+            }
+
+            .timeline-step-title {
+                display: none;
+            }
+
+            .welcome-logo {
+                width: 90px;
+                height: 90px;
+            }
+
+            .celebration-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .celebration-icon i {
+                width: 48px;
+                height: 48px;
+            }
+        }
+
+        /* Scroll Peek Effect - Show edges of next/prev slides */
+        @media (min-width: 1600px) {
+            .scroll-container {
+                padding: 0 5vw;
+            }
+
+            .step {
+                min-width: 90vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Pattern -->
+    <div class="dotted-background"></div>
+    <div class="vertical-lines">
+        <div class="vertical-line"></div>
+        <div class="vertical-line"></div>
+        <div class="vertical-line"></div>
+        <div class="vertical-line"></div>
+        <div class="vertical-line"></div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <!-- Skip Button -->
+    <button class="skip-button" id="skipBtn">Skip</button>
+
+    <!-- Navigation Arrows -->
+    <div class="nav-arrows">
+        <button class="nav-arrow" id="prevArrow" aria-label="Previous step">
+            <i data-lucide="chevron-left"></i>
+        </button>
+        <button class="nav-arrow visible" id="nextArrow" aria-label="Next step">
+            <i data-lucide="chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Horizontal Scroll Container -->
+    <div class="scroll-container" id="scrollContainer">
+        <!-- Step 1: Welcome -->
+        <div class="step in-view" data-step="1">
+            <div class="step-inner">
+                <div class="step-content">
+                    <h1 class="step-title">Welcome to <em>Propify AI</em></h1>
+                    <p class="step-description">
+                        Your intelligent sports betting companion. Get AI-powered analysis, real-time insights, and data-driven predictions.
+                    </p>
+                    <div class="feature-pills">
+                        <div class="feature-pill">
+                            <i data-lucide="sparkles"></i>
+                            AI Analysis
+                        </div>
+                        <div class="feature-pill">
+                            <i data-lucide="trending-up"></i>
+                            Real-time Data
+                        </div>
+                        <div class="feature-pill">
+                            <i data-lucide="shield-check"></i>
+                            Smart Insights
+                        </div>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-primary" onclick="scrollToNext()">
+                            Get Started
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                        <p class="legal-text">
+                            By continuing, you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="step-visual">
+                    <div class="welcome-logo">
+                        <img src="PropifyLogo.png" alt="Propify Logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: AI Chat Feature -->
+        <div class="step" data-step="2">
+            <div class="step-inner">
+                <div class="step-content">
+                    <span class="step-label">Feature 01</span>
+                    <h2 class="step-title">Ask <em>Anything</em></h2>
+                    <p class="step-description">
+                        Get instant AI-powered answers to any sports betting question. Real-time data, historical trends, and expert analysis at your fingertips.
+                    </p>
+                    <div class="step-actions">
+                        <button class="btn btn-primary" onclick="scrollToNext()">
+                            Continue
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="step-visual">
+                    <div class="showcase-card">
+                        <div class="showcase-header">
+                            <div class="showcase-header-left">
+                                <div class="showcase-icon">
+                                    <i data-lucide="message-circle"></i>
+                                </div>
+                                <span class="showcase-title">AI Chat</span>
+                            </div>
+                            <div class="showcase-badge">
+                                <div class="showcase-badge-dot"></div>
+                                Online
+                            </div>
+                        </div>
+                        <div class="showcase-content">
+                            <div class="chat-preview">
+                                <div class="chat-message user">
+                                    Should I take LeBron over 25.5 points tonight?
+                                </div>
+                                <div class="chat-message ai">
+                                    Based on my analysis, LeBron has hit this line in 8 of his last 10 games. Against tonight's defense, I'm seeing an 87% confidence rating. ✓
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Analysis Feature -->
+        <div class="step" data-step="3">
+            <div class="step-inner">
+                <div class="step-content">
+                    <span class="step-label">Feature 02</span>
+                    <h2 class="step-title">Deep <em>Analysis</em></h2>
+                    <p class="step-description">
+                        Comprehensive player breakdowns with AI-powered confidence scores, historical trends, and matchup analysis.
+                    </p>
+                    <div class="step-actions">
+                        <button class="btn btn-primary" onclick="scrollToNext()">
+                            Continue
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="step-visual">
+                    <div class="showcase-card">
+                        <div class="showcase-header">
+                            <div class="showcase-header-left">
+                                <div class="showcase-icon">
+                                    <i data-lucide="bar-chart-3"></i>
+                                </div>
+                                <span class="showcase-title">Player Analysis</span>
+                            </div>
+                            <div class="showcase-badge">
+                                <div class="showcase-badge-dot"></div>
+                                Live
+                            </div>
+                        </div>
+                        <div class="showcase-content">
+                            <div class="analysis-preview">
+                                <div class="player-card">
+                                    <div class="player-avatar">
+                                        <i data-lucide="user"></i>
+                                    </div>
+                                    <div class="player-info">
+                                        <div class="player-name">Stephen Curry</div>
+                                        <div class="player-team">Golden State Warriors</div>
+                                    </div>
+                                    <div class="player-score">
+                                        <div class="score-value">87</div>
+                                        <div class="score-label">AI Score</div>
+                                    </div>
+                                </div>
+                                <div class="stats-grid">
+                                    <div class="stat-item">
+                                        <div class="stat-value">28.4</div>
+                                        <div class="stat-label">PPG</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value">5.2</div>
+                                        <div class="stat-label">APG</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value">42%</div>
+                                        <div class="stat-label">3P%</div>
+                                    </div>
+                                </div>
+                                <div class="confidence-bar">
+                                    <div class="confidence-header">
+                                        <span class="confidence-label">Over 26.5 Points</span>
+                                        <span class="confidence-value">87%</span>
+                                    </div>
+                                    <div class="confidence-track">
+                                        <div class="confidence-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Heatmap Feature -->
+        <div class="step" data-step="4">
+            <div class="step-inner">
+                <div class="step-content">
+                    <span class="step-label">Feature 03</span>
+                    <h2 class="step-title">Visual <em>Heatmaps</em></h2>
+                    <p class="step-description">
+                        Instantly spot hot streaks and cold spells with our visual heatmap analysis. Know when to bet and when to wait.
+                    </p>
+                    <div class="step-actions">
+                        <button class="btn btn-primary" onclick="scrollToNext()">
+                            Continue
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="step-visual">
+                    <div class="showcase-card">
+                        <div class="showcase-header">
+                            <div class="showcase-header-left">
+                                <div class="showcase-icon">
+                                    <i data-lucide="flame"></i>
+                                </div>
+                                <span class="showcase-title">Performance Heatmap</span>
+                            </div>
+                            <div class="showcase-badge">
+                                <div class="showcase-badge-dot"></div>
+                                Updated
+                            </div>
+                        </div>
+                        <div class="showcase-content">
+                            <div class="heatmap-preview">
+                                <div class="heatmap-grid">
+                                    <div class="heat-cell low"></div>
+                                    <div class="heat-cell medium"></div>
+                                    <div class="heat-cell high"></div>
+                                    <div class="heat-cell very-high"></div>
+                                    <div class="heat-cell hot"></div>
+                                    <div class="heat-cell high"></div>
+                                    <div class="heat-cell medium"></div>
+                                    <div class="heat-cell medium"></div>
+                                    <div class="heat-cell high"></div>
+                                    <div class="heat-cell hot"></div>
+                                    <div class="heat-cell hot"></div>
+                                    <div class="heat-cell very-high"></div>
+                                    <div class="heat-cell medium"></div>
+                                    <div class="heat-cell low"></div>
+                                    <div class="heat-cell low"></div>
+                                    <div class="heat-cell medium"></div>
+                                    <div class="heat-cell very-high"></div>
+                                    <div class="heat-cell hot"></div>
+                                    <div class="heat-cell hot"></div>
+                                    <div class="heat-cell high"></div>
+                                    <div class="heat-cell medium"></div>
+                                    <div class="heat-cell medium"></div>
+                                    <div class="heat-cell low"></div>
+                                    <div class="heat-cell medium"></div>
+                                    <div class="heat-cell high"></div>
+                                    <div class="heat-cell very-high"></div>
+                                    <div class="heat-cell hot"></div>
+                                    <div class="heat-cell high"></div>
+                                    <div class="heat-cell high"></div>
+                                    <div class="heat-cell medium"></div>
+                                    <div class="heat-cell low"></div>
+                                    <div class="heat-cell medium"></div>
+                                    <div class="heat-cell high"></div>
+                                    <div class="heat-cell very-high"></div>
+                                    <div class="heat-cell medium"></div>
+                                </div>
+                                <div class="heatmap-legend">
+                                    <div class="legend-item">
+                                        <div class="legend-dot" style="background: rgba(74, 222, 128, 0.12);"></div>
+                                        Cold
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-dot" style="background: rgba(74, 222, 128, 0.28);"></div>
+                                        Warm
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-dot" style="background: rgba(74, 222, 128, 0.48);"></div>
+                                        Hot
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-dot" style="background: var(--primary);"></div>
+                                        On Fire
+                                    </div>
+                                </div>
+                                <div class="heatmap-insight">
+                                    <div class="insight-icon">
+                                        <i data-lucide="zap"></i>
+                                    </div>
+                                    <div class="insight-content">
+                                        <h5>Hot Streak Detected</h5>
+                                        <p>Player averaging +15% above season line</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5: Sports Selection -->
+        <div class="step" data-step="5">
+            <div class="step-inner">
+                <div class="step-content">
+                    <h2 class="step-title">What do you <em>follow?</em></h2>
+                    <p class="step-description">
+                        Select your favorite sports to personalize your experience. You can change this later in settings.
+                    </p>
+                    <p class="selection-hint">Select as many as you like</p>
+                </div>
+                <div class="step-visual">
+                    <div class="sports-grid">
+                        <div class="sport-option" data-sport="nba" onclick="toggleSport(this)">
+                            <div class="sport-option-check">
+                                <i data-lucide="check"></i>
+                            </div>
+                            <div class="sport-option-icon">🏀</div>
+                            <span class="sport-option-name">NBA</span>
+                        </div>
+                        <div class="sport-option" data-sport="nfl" onclick="toggleSport(this)">
+                            <div class="sport-option-check">
+                                <i data-lucide="check"></i>
+                            </div>
+                            <div class="sport-option-icon">🏈</div>
+                            <span class="sport-option-name">NFL</span>
+                        </div>
+                        <div class="sport-option" data-sport="mlb" onclick="toggleSport(this)">
+                            <div class="sport-option-check">
+                                <i data-lucide="check"></i>
+                            </div>
+                            <div class="sport-option-icon">⚾</div>
+                            <span class="sport-option-name">MLB</span>
+                        </div>
+                        <div class="sport-option" data-sport="nhl" onclick="toggleSport(this)">
+                            <div class="sport-option-check">
+                                <i data-lucide="check"></i>
+                            </div>
+                            <div class="sport-option-icon">🏒</div>
+                            <span class="sport-option-name">NHL</span>
+                        </div>
+                        <div class="sport-option" data-sport="soccer" onclick="toggleSport(this)">
+                            <div class="sport-option-check">
+                                <i data-lucide="check"></i>
+                            </div>
+                            <div class="sport-option-icon">⚽</div>
+                            <span class="sport-option-name">Soccer</span>
+                        </div>
+                        <div class="sport-option" data-sport="mma" onclick="toggleSport(this)">
+                            <div class="sport-option-check">
+                                <i data-lucide="check"></i>
+                            </div>
+                            <div class="sport-option-icon">🥊</div>
+                            <span class="sport-option-name">MMA</span>
+                        </div>
+                    </div>
+                    <div class="step-actions" style="margin-top: 32px;">
+                        <button class="btn btn-primary" onclick="scrollToNext()">
+                            Continue
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                        <button class="btn btn-ghost" onclick="scrollToNext()">
+                            Skip for now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6: All Set -->
+        <div class="step" data-step="6">
+            <div class="step-inner">
+                <div class="step-content">
+                    <h2 class="step-title">You're <em>All Set!</em></h2>
+                    <p class="step-description">
+                        Your personalized AI sports assistant is ready. Let's start winning together.
+                    </p>
+                    <div class="step-actions">
+                        <button class="btn btn-primary" onclick="completeOnboarding()">
+                            <i data-lucide="sparkles"></i>
+                            Start Using Propify AI
+                        </button>
+                        <div class="signin-divider">
+                            <span>or</span>
+                        </div>
+                        <a href="login.html" class="btn btn-secondary">
+                            <i data-lucide="log-in"></i>
+                            Already have an account? Sign In
+                        </a>
+                    </div>
+                </div>
+                <div class="step-visual">
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <div class="celebration-icon">
+                            <i data-lucide="rocket"></i>
+                        </div>
+                        <div class="final-features">
+                            <div class="final-feature">
+                                <div class="final-feature-icon">
+                                    <i data-lucide="message-circle"></i>
+                                </div>
+                                <div>
+                                    <h4>AI Chat Ready</h4>
+                                    <p>Ask any question</p>
+                                </div>
+                            </div>
+                            <div class="final-feature">
+                                <div class="final-feature-icon">
+                                    <i data-lucide="scan"></i>
+                                </div>
+                                <div>
+                                    <h4>Scan Bet Slips</h4>
+                                    <p>Analyze with camera</p>
+                                </div>
+                            </div>
+                            <div class="final-feature">
+                                <div class="final-feature-icon">
+                                    <i data-lucide="bell"></i>
+                                </div>
+                                <div>
+                                    <h4>Smart Alerts</h4>
+                                    <p>Get hot prop alerts</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Horizontal Timeline - Bottom -->
+    <div class="timeline-container">
+        <div class="timeline-wrapper">
+            <div class="timeline-track">
+                <div class="timeline-progress" id="timelineProgress"></div>
+            </div>
+            <div class="timeline-steps">
+                <div class="timeline-step active" data-step="1" onclick="scrollToStep(1)">
+                    <div class="timeline-step-dot"></div>
+                    <div class="timeline-step-label">
+                        <span class="timeline-step-number">Step 01</span>
+                        <span class="timeline-step-title">Welcome</span>
+                    </div>
+                </div>
+                <div class="timeline-step" data-step="2" onclick="scrollToStep(2)">
+                    <div class="timeline-step-dot"></div>
+                    <div class="timeline-step-label">
+                        <span class="timeline-step-number">Step 02</span>
+                        <span class="timeline-step-title">AI Chat</span>
+                    </div>
+                </div>
+                <div class="timeline-step" data-step="3" onclick="scrollToStep(3)">
+                    <div class="timeline-step-dot"></div>
+                    <div class="timeline-step-label">
+                        <span class="timeline-step-number">Step 03</span>
+                        <span class="timeline-step-title">Analysis</span>
+                    </div>
+                </div>
+                <div class="timeline-step" data-step="4" onclick="scrollToStep(4)">
+                    <div class="timeline-step-dot"></div>
+                    <div class="timeline-step-label">
+                        <span class="timeline-step-number">Step 04</span>
+                        <span class="timeline-step-title">Heatmaps</span>
+                    </div>
+                </div>
+                <div class="timeline-step" data-step="5" onclick="scrollToStep(5)">
+                    <div class="timeline-step-dot"></div>
+                    <div class="timeline-step-label">
+                        <span class="timeline-step-number">Step 05</span>
+                        <span class="timeline-step-title">Sports</span>
+                    </div>
+                </div>
+                <div class="timeline-step" data-step="6" onclick="scrollToStep(6)">
+                    <div class="timeline-step-dot"></div>
+                    <div class="timeline-step-label">
+                        <span class="timeline-step-number">Step 06</span>
+                        <span class="timeline-step-title">Ready</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // State
+        let currentStep = 1;
+        const totalSteps = 6;
+        const selectedSports = new Set();
+
+        // DOM Elements
+        const scrollContainer = document.getElementById('scrollContainer');
+        const steps = document.querySelectorAll('.step');
+        const timelineSteps = document.querySelectorAll('.timeline-step');
+        const timelineProgress = document.getElementById('timelineProgress');
+        const prevArrow = document.getElementById('prevArrow');
+        const nextArrow = document.getElementById('nextArrow');
+        const skipBtn = document.getElementById('skipBtn');
+        const confettiContainer = document.getElementById('confettiContainer');
+
+        // Check authentication and onboarding status
+        function checkOnboardingStatus() {
+            // Use the auth helper
+            const isLoggedIn = PropifyAuth.isLoggedIn();
+            const hasCompletedOnboarding = PropifyAuth.hasCompletedOnboarding();
+            
+            // If user is logged in and has completed onboarding, redirect to AI chat
+            if (isLoggedIn && hasCompletedOnboarding) {
+                window.location.href = 'ai-chat.html';
+            }
+            
+            // DON'T clear onboarding status for non-logged-in users
+            // They might be in the process of completing it before login
+            // Only clear when they explicitly log out (handled in auth-helper)
+        }
+
+        // Initialize
+        checkOnboardingStatus();
+
+        // Scroll to specific step
+        function scrollToStep(stepNumber) {
+            const targetStep = document.querySelector(`.step[data-step="${stepNumber}"]`);
+            if (targetStep) {
+                targetStep.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            }
+        }
+
+        // Scroll to next step
+        function scrollToNext() {
+            if (currentStep < totalSteps) {
+                scrollToStep(currentStep + 1);
+            }
+        }
+
+        // Scroll to previous step
+        function scrollToPrev() {
+            if (currentStep > 1) {
+                scrollToStep(currentStep - 1);
+            }
+        }
+
+        // Update current step based on scroll position
+        function updateCurrentStep() {
+            const scrollLeft = scrollContainer.scrollLeft;
+            const stepWidth = window.innerWidth;
+            const newStep = Math.round(scrollLeft / stepWidth) + 1;
+            
+            if (newStep !== currentStep && newStep >= 1 && newStep <= totalSteps) {
+                currentStep = newStep;
+                updateUI();
+                
+                // Trigger confetti on final step
+                if (currentStep === totalSteps) {
+                    setTimeout(() => triggerConfetti(), 300);
+                }
+            }
+        }
+
+        // Update UI based on current step
+        function updateUI() {
+            // Update timeline steps
+            timelineSteps.forEach((timelineStep, index) => {
+                const stepNum = index + 1;
+                timelineStep.classList.remove('active', 'completed');
+                
+                if (stepNum < currentStep) {
+                    timelineStep.classList.add('completed');
+                } else if (stepNum === currentStep) {
+                    timelineStep.classList.add('active');
+                }
+            });
+
+            // Update timeline progress bar
+            const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            timelineProgress.style.width = progressPercent + '%';
+
+            // Update step visibility classes
+            steps.forEach((step, index) => {
+                const stepNum = index + 1;
+                if (stepNum === currentStep) {
+                    step.classList.add('in-view');
+                } else {
+                    step.classList.remove('in-view');
+                }
+            });
+
+            // Update navigation arrows
+            if (currentStep === 1) {
+                prevArrow.classList.remove('visible');
+            } else {
+                prevArrow.classList.add('visible');
+            }
+
+            if (currentStep === totalSteps) {
+                nextArrow.classList.remove('visible');
+            } else {
+                nextArrow.classList.add('visible');
+            }
+
+            // Re-initialize icons
+            lucide.createIcons();
+        }
+
+        // Intersection Observer for step animations
+        const observerOptions = {
+            root: scrollContainer,
+            threshold: 0.5
+        };
+
+        const stepObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, observerOptions);
+
+        steps.forEach(step => {
+            stepObserver.observe(step);
+        });
+
+        // Scroll event listener with debounce
+        let scrollTimeout;
+        scrollContainer.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                updateCurrentStep();
+            }, 100);
+        });
+
+        // Navigation arrow handlers
+        prevArrow.addEventListener('click', scrollToPrev);
+        nextArrow.addEventListener('click', scrollToNext);
+
+        // Skip button handler
+        skipBtn.addEventListener('click', () => {
+            completeOnboarding();
+        });
+
+        // Sports Selection
+        function toggleSport(element) {
+            const sport = element.dataset.sport;
+            
+            if (selectedSports.has(sport)) {
+                selectedSports.delete(sport);
+                element.classList.remove('selected');
+            } else {
+                selectedSports.add(sport);
+                element.classList.add('selected');
+            }
+            
+            localStorage.setItem('propify_selected_sports', JSON.stringify([...selectedSports]));
+            lucide.createIcons();
+        }
+
+        // Confetti Animation
+        function triggerConfetti() {
+            const colors = ['#4ADE80', '#22c55e', '#86efac', '#6ee7b7', '#34d399'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = (Math.random() * 6 + 4) + 'px';
+                    confetti.style.height = (Math.random() * 6 + 4) + 'px';
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '1px';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                    
+                    confettiContainer.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.classList.add('active'), 10);
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 20);
+            }
+        }
+
+        // Complete Onboarding
+        function completeOnboarding() {
+            // Use the auth helper to handle completion and routing
+            PropifyAuth.finishOnboarding();
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                scrollToNext();
+            } else if (e.key === 'ArrowLeft') {
+                scrollToPrev();
+            } else if (e.key === 'Enter' && currentStep === totalSteps) {
+                completeOnboarding();
+            } else if (e.key === 'Escape') {
+                completeOnboarding();
+            }
+        });
+
+        // Mouse wheel horizontal scroll
+        scrollContainer.addEventListener('wheel', (e) => {
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                e.preventDefault();
+                scrollContainer.scrollLeft += e.deltaY;
+            }
+        }, { passive: false });
+
+        // Touch swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        scrollContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        scrollContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchStartX - touchEndX > swipeThreshold) {
+                scrollToNext();
+            } else if (touchEndX - touchStartX > swipeThreshold) {
+                scrollToPrev();
+            }
+        }
+
+        // Initialize UI
+        updateUI();
+    </script>
+</body>
+</html>
