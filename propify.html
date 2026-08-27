@@ -3929,6 +3929,25 @@
         .animate-in {
             animation: fadeInUp 0.6s ease-out forwards;
         }
+    
+        /* ── Animated hero background (Paper Shaders, warp) ──────────────── */
+        .hero { position: relative; isolation: isolate; }
+        .hero-shader {
+            position: absolute; inset: 0; z-index: 0;
+            opacity: 0; transition: opacity 1.2s ease-out;
+            pointer-events: none;
+        }
+        .hero-shader.is-ready { opacity: 0.95; }
+        /* Keeps the centered headline readable over the moving colour field. */
+        .hero-shader-veil {
+            position: absolute; inset: 0; z-index: 1; pointer-events: none;
+            background:
+              radial-gradient(78% 62% at 50% 46%, rgba(0,0,0,.94) 0%, rgba(0,0,0,.82) 38%, rgba(0,0,0,.35) 68%, transparent 100%),
+              linear-gradient(180deg, rgba(0,0,0,.55) 0%, transparent 22%, transparent 72%, #000 100%);
+        }
+        .hero > *:not(.hero-shader):not(.hero-shader-veil) { position: relative; z-index: 2; }
+        @media (prefers-reduced-motion: reduce) { .hero-shader { display: none; } }
+
     </style>
 </head>
 <body>
@@ -3993,6 +4012,8 @@
 
     <!-- Hero Section -->
     <section class="hero">
+        <div class="hero-shader" id="heroShader" aria-hidden="true"></div>
+        <div class="hero-shader-veil" aria-hidden="true"></div>
         <div class="hero-container">
             <div class="hero-content">
                 <p class="hero-label">The ChatGPT for Sports Betting</p>
@@ -5896,6 +5917,46 @@
 
         // Initialize onboarding routing
         document.addEventListener('DOMContentLoaded', setupOnboardingRouting);
+    </script>
+
+    <script type="module">
+      // Animated green wave field behind the hero.
+      // Paper Shaders (Apache-2.0) - see paper-shaders.js header.
+      import { ShaderMount, getShaderColorFromString as toColor, getShaderNoiseTexture,
+               warpFragmentShader, defaultPatternSizing } from './paper-shaders.js';
+
+      const host = document.getElementById('heroShader');
+      if (host && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        try {
+          const noise = getShaderNoiseTexture();
+          await (noise.decode
+            ? noise.decode().catch(() => {})
+            : new Promise((r) => { noise.onload = r; noise.onerror = r; }));
+
+          const z = { ...defaultPatternSizing, scale: 0.9 };
+          new ShaderMount(host, warpFragmentShader, {
+            u_colors: ['#000000', '#065F46', '#10b981', '#4ADE80'].map(toColor),
+            u_colorsCount: 4,
+            u_proportion: 0.5,
+            u_softness: 1,
+            u_distortion: 0.22,
+            u_swirl: 0.75,
+            u_swirlIterations: 9,
+            u_shape: 1,
+            u_shapeScale: 0.08,
+            u_noiseTexture: noise,
+            u_fit: 0,
+            u_scale: z.scale, u_rotation: z.rotation,
+            u_offsetX: z.offsetX, u_offsetY: z.offsetY,
+            u_originX: z.originX, u_originY: z.originY,
+            u_worldWidth: z.worldWidth, u_worldHeight: z.worldHeight,
+          }, undefined, 0.35);
+
+          host.classList.add('is-ready');
+        } catch (e) {
+          // No WebGL - the hero just keeps its plain black background.
+        }
+      }
     </script>
 </body>
 </html>
