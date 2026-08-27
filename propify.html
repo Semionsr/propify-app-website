@@ -367,8 +367,18 @@
         }
 
         .btn-primary {
-            background: var(--text-primary);
-            color: var(--bg-primary);
+            background: linear-gradient(135deg, #4ADE80 0%, #16a34a 100%);
+            color: #052e16;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            box-shadow:
+                0 8px 28px rgba(34, 197, 94, 0.38),
+                inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5ce694 0%, #18ad50 100%);
+            box-shadow:
+                0 12px 36px rgba(34, 197, 94, 0.50),
+                inset 0 1px 0 rgba(255, 255, 255, 0.45);
         }
 
         .btn-primary:hover {
@@ -463,21 +473,28 @@
             margin-bottom: 40px;
         }
 
-        .hero-title em {
-            font-style: normal;
-            color: inherit;
+        .hero-title em { font-style: normal; }
+        /* The accent gradient is applied per-letter, since each character is
+           its own span for the reveal. */
+        .hero-title em .rv {
+            background: linear-gradient(180deg, #86efac 12%, #22c55e 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
         }
 
         .hero-description {
-            font-size: 18px;
+            font-size: 19px;
             color: var(--text-secondary);
-            line-height: 1.7;
+            line-height: 1.6;
             margin-bottom: 48px;
-            max-width: 600px;
+            max-width: 380px;
             margin-left: auto;
             margin-right: auto;
         }
 
+        .hero-cta .btn { padding: 15px 30px; font-size: 15px; border-radius: 10px; }
         .hero-cta {
             display: flex;
             align-items: center;
@@ -3992,21 +4009,16 @@
         }
         .hero-paths path {
             fill: none;
-            stroke: var(--primary-emerald, #4ADE80);
-            vector-effect: non-scaling-stroke;
+            stroke: var(--primary, #4ADE80);
+            stroke-linecap: round;
         }
-        .hero-paths svg { animation: pathDrift 24s ease-in-out infinite alternate; }
-        .hero-paths.is-ready { animation: pathWipe 2.6s cubic-bezier(.5,.02,.35,1) forwards; }
-        @keyframes pathWipe {
-            from { clip-path: inset(0 100% 0 0); }
-            to   { clip-path: inset(0 0 0 0); }
-        }
-        @keyframes pathDrift {
-            from { opacity: .72; transform: translate3d(-1.5%, 0, 0) scale(1.04); }
-            to   { opacity: 1;   transform: translate3d(1.5%, 0, 0)  scale(1.00); }
-        }
-        /* Keeps the centred copy readable and fades the field into the
-           black of the next section. */
+        /* Each line draws along its own direction, staggered so the field
+           sweeps in. No non-scaling-stroke here: the dash pattern and
+           getTotalLength() must share the same unit space. */
+        .hero-paths.is-ready path { animation: pathDraw 2.4s cubic-bezier(.33,.7,.3,1) forwards; }
+        @keyframes pathDraw { to { stroke-dashoffset: 0; } }
+        .hero-paths svg { animation: pathBreathe 18s ease-in-out infinite alternate; }
+        @keyframes pathBreathe { from { opacity: .8; } to { opacity: 1; } }
         .hero-paths-veil {
             position: absolute; inset: 0; z-index: 1; pointer-events: none;
             background:
@@ -4032,7 +4044,8 @@
         }
         @media (prefers-reduced-motion: reduce) {
             .hero-paths svg { animation: none; opacity: .8; transform: none; }
-            .hero-paths.is-ready { animation: none; clip-path: none; }
+            .hero-paths.is-ready path { animation: none; stroke-dashoffset: 0; }
+            .hero-paths svg { animation: none; opacity: .9; }
             .hero-title .rv { animation: none; opacity: 1; transform: none; }
         }
 
@@ -4119,7 +4132,7 @@
             <div class="hero-content">
                 <h1 class="hero-title">
                     See the numbers<br>
-                    behind every bet
+                    behind <em>every bet</em>
                 </h1>
 
                 <p class="hero-description">
@@ -6030,32 +6043,78 @@
         var host = document.getElementById('heroPaths');
         if (host) {
           var NS = 'http://www.w3.org/2000/svg';
+          var W = 1000, H = 620;
           var svg = document.createElementNS(NS, 'svg');
-          svg.setAttribute('viewBox', '0 0 696 316');
+          svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
           svg.setAttribute('preserveAspectRatio', 'none');
           svg.setAttribute('fill', 'none');
 
-          // Two mirrored fans, same as the original's position={1} / {-1}.
-          [1, -1].forEach(function (position) {
-            for (var i = 0; i < 36; i++) {
-              var d =
-                'M-' + (380 - i * 5 * position) + ' -' + (189 + i * 6) +
-                'C-' + (380 - i * 5 * position) + ' -' + (189 + i * 6) +
-                ' -' + (312 - i * 5 * position) + ' ' + (216 - i * 6) +
-                ' ' + (152 - i * 5 * position) + ' ' + (343 - i * 6) +
-                'C' + (616 - i * 5 * position) + ' ' + (470 - i * 6) +
-                ' ' + (684 - i * 5 * position) + ' ' + (875 - i * 6) +
-                ' ' + (684 - i * 5 * position) + ' ' + (875 - i * 6);
+          function line(d, width, opacity) {
+            var el = document.createElementNS(NS, 'path');
+            el.setAttribute('d', d);
+            el.setAttribute('stroke-width', width.toFixed(2));
+            el.style.strokeOpacity = opacity.toFixed(3);
+            svg.appendChild(el);
+            return el;
+          }
 
-              var path = document.createElementNS(NS, 'path');
-              path.setAttribute('d', d);
-              path.setAttribute('stroke-width', (0.5 + i * 0.03).toFixed(2));
-              path.style.strokeOpacity = (0.10 + i * 0.025).toFixed(3);
-              svg.appendChild(path);
-            }
-          });
+          // Bundle A - streamlines entering left, bowing across and off the bottom.
+          var A = 30;
+          for (var i = 0; i < A; i++) {
+            var t = i / (A - 1);
+            var y0 = 205 + t * 265;
+            line(
+              'M -90 ' + y0.toFixed(1) +
+              ' C ' + (230 + t * 70).toFixed(1) + ' ' + (y0 - 6).toFixed(1) +
+              ', ' + (450 + t * 60).toFixed(1) + ' ' + (y0 + 52 + t * 34).toFixed(1) +
+              ', ' + (640 + t * 150).toFixed(1) + ' ' + (H + 90),
+              0.6 + t * 0.6,
+              0.30 + t * 0.55
+            );
+          }
+
+          // Bundle B - long sweep from the upper right that pinches into a focus
+          // near the lower right, then flares past it.
+          var B = 32, fx = 792, fy = 556;
+          for (var j = 0; j < B; j++) {
+            var u = j / (B - 1);
+            line(
+              'M ' + (W + 130).toFixed(1) + ' ' + (-70 + u * 250).toFixed(1) +
+              ' C ' + (860 - u * 210).toFixed(1) + ' ' + (40 + u * 120).toFixed(1) +
+              ', ' + (540 - u * 90).toFixed(1) + ' ' + (300 + u * 60).toFixed(1) +
+              ', ' + fx + ' ' + fy +
+              ' C ' + (fx + 70 + u * 50).toFixed(1) + ' ' + (fy + 8).toFixed(1) +
+              ', ' + (fx + 150).toFixed(1) + ' ' + (fy + 22 + u * 30).toFixed(1) +
+              ', ' + (W + 140) + ' ' + (fy + 30 + u * 52).toFixed(1),
+              0.5 + u * 0.6,
+              0.20 + u * 0.48
+            );
+          }
+
+          // A single wide arc across the upper right, well faded.
+          for (var k = 0; k < 5; k++) {
+            var v = k / 4;
+            line(
+              'M ' + (620 - v * 40) + ' -30' +
+              ' C ' + (900 + v * 30) + ' ' + (60 + v * 40) +
+              ', ' + (980 + v * 40) + ' ' + (250 + v * 50) +
+              ', ' + (760 - v * 30) + ' ' + (400 + v * 60),
+              0.5 + v * 0.3,
+              0.10 + v * 0.06
+            );
+          }
 
           host.appendChild(svg);
+
+          if (!reduce) {
+            var paths = svg.querySelectorAll('path');
+            Array.prototype.forEach.call(paths, function (path, n) {
+              var len = path.getTotalLength();
+              path.style.strokeDasharray = len;
+              path.style.strokeDashoffset = len;
+              path.style.animationDelay = (n * 0.028).toFixed(3) + 's';
+            });
+          }
 
           host.classList.add('is-ready');
         }
