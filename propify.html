@@ -365,6 +365,8 @@
         /* Hero Section */
         .hero {
             position: relative;
+            min-height: 100vh;
+            min-height: 100svh;
             padding: 100px 0 140px;
             z-index: 10;
         }
@@ -3963,7 +3965,7 @@
             position: absolute; inset: 0; z-index: 1; pointer-events: none;
             background:
               radial-gradient(48% 32% at 50% 38%, rgba(0,0,0,.80) 0%, rgba(0,0,0,.42) 58%, transparent 100%),
-              linear-gradient(180deg, rgba(0,0,0,.45) 0%, transparent 18%, transparent 80%, #000 100%);
+              linear-gradient(180deg, rgba(0,0,0,.45) 0%, transparent 18%, transparent 88%, rgba(0,0,0,.75) 100%);
         }
         .hero > *:not(.hero-paths):not(.hero-paths-veil) { position: relative; z-index: 2; }
 
@@ -4060,6 +4062,10 @@
                     See the numbers<br>
                     behind every bet
                 </h1>
+
+                <p class="hero-description">
+                    Propify AI transforms raw data into actionable insights.
+                </p>
                 
                 <div class="hero-cta">
                     <a href="https://apps.apple.com/us/app/propify-ai-prop-analysis/id6751057808" class="btn btn-primary" target="_blank" rel="noopener">
