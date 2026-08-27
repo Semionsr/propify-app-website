@@ -406,18 +406,18 @@
         }
 
         .hero-title {
-            font-family: var(--font-serif);
-            font-size: clamp(42px, 6vw, 72px);
-            font-weight: 400;
-            line-height: 1.1;
-            letter-spacing: -2px;
+            font-family: var(--font-sans);
+            font-size: clamp(46px, 8.5vw, 104px);
+            font-weight: 800;
+            line-height: 0.96;
+            letter-spacing: -0.045em;
             color: var(--text-primary);
-            margin-bottom: 28px;
+            margin-bottom: 40px;
         }
 
         .hero-title em {
-            font-style: italic;
-            color: var(--primary);
+            font-style: normal;
+            color: inherit;
         }
 
         .hero-description {
@@ -3948,8 +3948,13 @@
             vector-effect: non-scaling-stroke;
         }
         .hero-paths svg { animation: pathDrift 24s ease-in-out infinite alternate; }
+        .hero-paths.is-ready { animation: pathWipe 2.6s cubic-bezier(.5,.02,.35,1) forwards; }
+        @keyframes pathWipe {
+            from { clip-path: inset(0 100% 0 0); }
+            to   { clip-path: inset(0 0 0 0); }
+        }
         @keyframes pathDrift {
-            from { opacity: .55; transform: translate3d(-1.5%, 0, 0) scale(1.04); }
+            from { opacity: .72; transform: translate3d(-1.5%, 0, 0) scale(1.04); }
             to   { opacity: 1;   transform: translate3d(1.5%, 0, 0)  scale(1.00); }
         }
         /* Keeps the centred copy readable and fades the field into the
@@ -3967,6 +3972,11 @@
             display: inline-block;
             opacity: 0;
             transform: translateY(0.4em);
+            background: linear-gradient(180deg, #ffffff 18%, rgba(255,255,255,.62) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
             animation: rvIn .7s cubic-bezier(.2,.7,.3,1) forwards;
         }
         @keyframes rvIn {
@@ -3974,6 +3984,7 @@
         }
         @media (prefers-reduced-motion: reduce) {
             .hero-paths svg { animation: none; opacity: .8; transform: none; }
+            .hero-paths.is-ready { animation: none; clip-path: none; }
             .hero-title .rv { animation: none; opacity: 1; transform: none; }
         }
 
@@ -4045,16 +4056,10 @@
         <div class="hero-paths-veil" aria-hidden="true"></div>
         <div class="hero-container">
             <div class="hero-content">
-                <p class="hero-label">The ChatGPT for Sports Betting</p>
-                
                 <h1 class="hero-title">
-                    The <em>AI analysis</em> platform for<br>
-                    smarter sports betting
+                    See the numbers<br>
+                    behind every bet
                 </h1>
-                
-                <p class="hero-description">
-                    Propify AI transforms raw data into actionable insights. Analyze player performance, track historical trends, and make informed decisions backed by machine learning.
-                </p>
                 
                 <div class="hero-cta">
                     <a href="https://apps.apple.com/us/app/propify-ai-prop-analysis/id6751057808" class="btn btn-primary" target="_blank" rel="noopener">
@@ -5980,12 +5985,13 @@
               var path = document.createElementNS(NS, 'path');
               path.setAttribute('d', d);
               path.setAttribute('stroke-width', (0.5 + i * 0.03).toFixed(2));
-              path.style.strokeOpacity = (0.08 + i * 0.014).toFixed(3);
+              path.style.strokeOpacity = (0.10 + i * 0.025).toFixed(3);
               svg.appendChild(path);
             }
           });
 
           host.appendChild(svg);
+
           host.classList.add('is-ready');
         }
 
