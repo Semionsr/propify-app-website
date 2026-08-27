@@ -3937,13 +3937,13 @@
             opacity: 0; transition: opacity 1.2s ease-out;
             pointer-events: none;
         }
-        .hero-shader.is-ready { opacity: 0.95; }
+        .hero-shader.is-ready { opacity: 0.85; }
         /* Keeps the centered headline readable over the moving colour field. */
         .hero-shader-veil {
             position: absolute; inset: 0; z-index: 1; pointer-events: none;
             background:
-              radial-gradient(78% 62% at 50% 46%, rgba(0,0,0,.94) 0%, rgba(0,0,0,.82) 38%, rgba(0,0,0,.35) 68%, transparent 100%),
-              linear-gradient(180deg, rgba(0,0,0,.55) 0%, transparent 22%, transparent 72%, #000 100%);
+              radial-gradient(62% 42% at 50% 38%, rgba(0,0,0,.85) 0%, rgba(0,0,0,.5) 55%, transparent 100%),
+              linear-gradient(180deg, transparent 0%, transparent 82%, rgba(0,0,0,.5) 94%, #000 100%);
         }
         .hero > *:not(.hero-shader):not(.hero-shader-veil) { position: relative; z-index: 2; }
         @media (prefers-reduced-motion: reduce) { .hero-shader { display: none; } }
@@ -5920,37 +5920,27 @@
     </script>
 
     <script type="module">
-      // Animated green wave field behind the hero.
+      // Dithered green wave behind the hero.
       // Paper Shaders (Apache-2.0) - see paper-shaders.js header.
-      import { ShaderMount, getShaderColorFromString as toColor, getShaderNoiseTexture,
-               warpFragmentShader, defaultPatternSizing } from './paper-shaders.js';
+      import { ShaderMount, getShaderColorFromString as toColor, ditheringFragmentShader,
+               DitheringShapes, DitheringTypes, defaultObjectSizing } from './paper-shaders.js';
 
       const host = document.getElementById('heroShader');
       if (host && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
         try {
-          const noise = getShaderNoiseTexture();
-          await (noise.decode
-            ? noise.decode().catch(() => {})
-            : new Promise((r) => { noise.onload = r; noise.onerror = r; }));
-
-          const z = { ...defaultPatternSizing, scale: 0.9 };
-          new ShaderMount(host, warpFragmentShader, {
-            u_colors: ['#000000', '#065F46', '#10b981', '#4ADE80'].map(toColor),
-            u_colorsCount: 4,
-            u_proportion: 0.5,
-            u_softness: 1,
-            u_distortion: 0.22,
-            u_swirl: 0.75,
-            u_swirlIterations: 9,
-            u_shape: 1,
-            u_shapeScale: 0.08,
-            u_noiseTexture: noise,
+          const z = { ...defaultObjectSizing, scale: 0.5, offsetY: 0.0 };
+          new ShaderMount(host, ditheringFragmentShader, {
+            u_colorBack: toColor('#000000'),
+            u_colorFront: toColor('#22c55e'),
+            u_shape: DitheringShapes.wave,
+            u_type: DitheringTypes['4x4'],
+            u_pxSize: 2,
             u_fit: 0,
             u_scale: z.scale, u_rotation: z.rotation,
             u_offsetX: z.offsetX, u_offsetY: z.offsetY,
             u_originX: z.originX, u_originY: z.originY,
             u_worldWidth: z.worldWidth, u_worldHeight: z.worldHeight,
-          }, undefined, 0.35);
+          }, undefined, 1);
 
           host.classList.add('is-ready');
         } catch (e) {
