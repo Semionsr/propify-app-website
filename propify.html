@@ -3930,24 +3930,24 @@
             animation: fadeInUp 0.6s ease-out forwards;
         }
     
-        /* ── Animated hero background (Paper Shaders, warp) ──────────────── */
+        /* ── Constellation field behind the hero ─────────────────────────── */
         .hero { position: relative; isolation: isolate; }
-        .hero-shader {
+        .hero-constellation {
             position: absolute; inset: 0; z-index: 0;
             opacity: 0; transition: opacity 1.2s ease-out;
             pointer-events: none;
         }
-        .hero-shader.is-ready { opacity: 0.72; }
-        /* Keeps the centered headline readable over the moving colour field. */
-        .hero-shader-veil {
+        .hero-constellation.is-ready { opacity: 1; }
+        .hero-constellation canvas { display: block; width: 100%; height: 100%; }
+        /* Depth wash: keeps the centred copy readable and fades the field into
+           the black of the next section. */
+        .hero-constellation-veil {
             position: absolute; inset: 0; z-index: 1; pointer-events: none;
             background:
-              radial-gradient(58% 38% at 50% 34%, rgba(0,0,0,.88) 0%, rgba(0,0,0,.5) 58%, transparent 100%),
-              radial-gradient(52% 30% at 50% 78%, rgba(0,0,0,.72) 0%, rgba(0,0,0,.34) 60%, transparent 100%),
-              linear-gradient(180deg, transparent 0%, transparent 74%, rgba(0,0,0,.62) 90%, #000 100%);
+              radial-gradient(46% 30% at 50% 36%, rgba(0,0,0,.82) 0%, rgba(0,0,0,.45) 55%, transparent 100%),
+              linear-gradient(180deg, rgba(0,0,0,.45) 0%, transparent 18%, transparent 80%, #000 100%);
         }
-        .hero > *:not(.hero-shader):not(.hero-shader-veil) { position: relative; z-index: 2; }
-        @media (prefers-reduced-motion: reduce) { .hero-shader { display: none; } }
+        .hero > *:not(.hero-constellation):not(.hero-constellation-veil) { position: relative; z-index: 2; }
 
     </style>
 </head>
@@ -4013,8 +4013,8 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-shader" id="heroShader" aria-hidden="true"></div>
-        <div class="hero-shader-veil" aria-hidden="true"></div>
+        <div class="hero-constellation" id="heroConstellation" aria-hidden="true"><canvas></canvas></div>
+        <div class="hero-constellation-veil" aria-hidden="true"></div>
         <div class="hero-container">
             <div class="hero-content">
                 <p class="hero-label">The ChatGPT for Sports Betting</p>
@@ -5920,34 +5920,123 @@
         document.addEventListener('DOMContentLoaded', setupOnboardingRouting);
     </script>
 
-    <script type="module">
-      // Dithered green wave behind the hero.
-      // Paper Shaders (Apache-2.0) - see paper-shaders.js header.
-      import { ShaderMount, getShaderColorFromString as toColor, ditheringFragmentShader,
-               DitheringShapes, DitheringTypes, defaultObjectSizing } from './paper-shaders.js';
+    <script>
+      // Constellation field behind the hero.
+      // Ported from MengTo/threeui "constellation-field" (MIT), recoloured to
+      // the Propify emerald and scoped to the hero instead of the whole page.
+      (function () {
+        var host = document.getElementById('heroConstellation');
+        if (!host) return;
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      const host = document.getElementById('heroShader');
-      if (host && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        try {
-          const z = { ...defaultObjectSizing, scale: 0.5, offsetY: 0.0 };
-          new ShaderMount(host, ditheringFragmentShader, {
-            u_colorBack: toColor('#000000'),
-            u_colorFront: toColor('#22c55e'),
-            u_shape: DitheringShapes.wave,
-            u_type: DitheringTypes['4x4'],
-            u_pxSize: 2,
-            u_fit: 0,
-            u_scale: z.scale, u_rotation: z.rotation,
-            u_offsetX: z.offsetX, u_offsetY: z.offsetY,
-            u_originX: z.originX, u_originY: z.originY,
-            u_worldWidth: z.worldWidth, u_worldHeight: z.worldHeight,
-          }, undefined, 1);
+        var canvas = host.querySelector('canvas');
+        var ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-          host.classList.add('is-ready');
-        } catch (e) {
-          // No WebGL - the hero just keeps its plain black background.
+        var GREEN = '#4ADE80';
+        var LINK = 160;          // max distance two nodes will link across
+        var POINTER_PULL = 220;  // cursor influence radius
+        var width = 0, height = 0, nodes = [];
+        var pointer = { x: -1e4, y: -1e4 };
+
+        function resize() {
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+          var r = host.getBoundingClientRect();
+          width = r.width; height = r.height;
+          canvas.width = Math.max(1, Math.floor(width * dpr));
+          canvas.height = Math.max(1, Math.floor(height * dpr));
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
-      }
+
+        function initNodes() {
+          // Scale the count to the area so wide monitors don't look sparse.
+          var target = Math.round((width * height) / 16000);
+          var max = Math.max(28, Math.min(window.innerWidth < 768 ? 40 : 110, target));
+          nodes = [];
+          for (var i = 0; i < max; i++) {
+            nodes.push({
+              x: Math.random() * width,
+              y: Math.random() * height,
+              vx: (Math.random() - 0.5) * 0.3,
+              vy: (Math.random() - 0.5) * 0.3,
+              radius: Math.random() * 2.4 + 1.8
+            });
+          }
+        }
+
+        function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+
+        function frame() {
+          ctx.clearRect(0, 0, width, height);
+
+          // Links first, so the nodes sit crisp on top.
+          ctx.strokeStyle = GREEN;
+          ctx.lineWidth = 1;
+          for (var i = 0; i < nodes.length; i++) {
+            for (var j = i + 1; j < nodes.length; j++) {
+              var d = dist(nodes[i], nodes[j]);
+              if (d < LINK) {
+                ctx.globalAlpha = 0.18 + (1 - d / LINK) * 0.45;
+                ctx.beginPath();
+                ctx.moveTo(nodes[i].x, nodes[i].y);
+                ctx.lineTo(nodes[j].x, nodes[j].y);
+                ctx.stroke();
+              }
+            }
+          }
+
+          var now = Date.now();
+          for (var k = 0; k < nodes.length; k++) {
+            var n = nodes[k];
+            n.x += n.vx;
+            n.y += n.vy;
+            if (n.x < 0 || n.x > width) n.vx *= -1;
+            if (n.y < 0 || n.y > height) n.vy *= -1;
+
+            var pd = dist(n, pointer);
+            if (pd < POINTER_PULL) {
+              n.x -= (n.x - pointer.x) * 0.005;
+              n.y -= (n.y - pointer.y) * 0.005;
+            }
+
+            // Core plus a soft halo so points still read on retina screens.
+            var pulse = 0.78 + Math.sin(now * 0.001 + n.x) * 0.22;
+            ctx.fillStyle = GREEN;
+            ctx.globalAlpha = pulse * 0.22;
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, n.radius * 2.4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = pulse * 0.85;
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          ctx.globalAlpha = 1;
+          requestAnimationFrame(frame);
+        }
+
+        // Track the cursor in hero-local coordinates.
+        window.addEventListener('mousemove', function (e) {
+          var r = host.getBoundingClientRect();
+          pointer.x = e.clientX - r.left;
+          pointer.y = e.clientY - r.top;
+        }, { passive: true });
+        document.addEventListener('mouseleave', function () {
+          pointer.x = -1e4; pointer.y = -1e4;
+        });
+
+        var resizeTimer;
+        window.addEventListener('resize', function () {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function () { resize(); initNodes(); }, 150);
+        });
+
+        resize();
+        initNodes();
+        requestAnimationFrame(frame);
+        host.classList.add('is-ready');
+      })();
     </script>
 </body>
 </html>
