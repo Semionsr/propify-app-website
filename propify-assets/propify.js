@@ -9,17 +9,32 @@
   document.addEventListener('keydown', event => { if (event.key === 'Escape') { closeMenu(); } });
   document.addEventListener('click', event => { if (!event.target.closest('.nav')) closeMenu(); });
 
+  // Walkthrough: the section pins and the four steps slide left-to-right with scroll; on phones the rail swipes.
   const steps = [...document.querySelectorAll('.step')];
   const stepImage = document.querySelector('#step-image');
   const screenData = [ ['home', 'Propify overview with league selection'], ['defense', 'Propify defensive matchups and player prop cards'], ['reports', 'Propify AI report with recent statistics and matchup history'], ['profiles', 'Propify player and team profiles'] ];
-  let selectedStep = 0;
+  const pin = document.querySelector('.walkthrough-pin');
+  const rail = document.querySelector('.steps-rail');
+  const stepsTrack = document.querySelector('.steps-track');
   const walkPhone = document.querySelector('.walk-phone');
+  const isRailScroll = () => window.innerWidth <= 560;
+  const last = steps.length - 1;
+  let selectedStep = 0, targetPos = 0, currentPos = 0, rafId = 0;
   walkPhone.addEventListener('animationend', () => walkPhone.classList.remove('is-switching'));
   function selectStep(index) { if (index !== selectedStep && !reducedMotion.matches) { walkPhone.classList.remove('is-switching'); void walkPhone.offsetWidth; walkPhone.classList.add('is-switching'); } selectedStep = index; steps.forEach((step, i) => { step.classList.toggle('is-active', i === index); step.querySelector('button').setAttribute('aria-pressed', String(i === index)); }); stepImage.src = `propify-assets/${screenData[index][0]}.webp`; stepImage.alt = screenData[index][1]; document.querySelector('#step-number').textContent = String(index + 1).padStart(2, '0'); }
-  steps.forEach((step, index) => step.querySelector('button').addEventListener('click', () => { selectStep(index); if (window.innerWidth <= 560) document.querySelector('.step-visual').scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start' }); }));
+  const stepPitch = () => steps[1].offsetLeft - steps[0].offsetLeft;
+  function render() { currentPos += (targetPos - currentPos) * .14; if (Math.abs(targetPos - currentPos) < .002) currentPos = targetPos; stepsTrack.style.transform = `translate3d(${-currentPos * stepPitch()}px,0,0)`; rail.style.setProperty('--p', (currentPos / last).toFixed(4)); const index = Math.round(currentPos); if (index !== selectedStep) selectStep(index); rafId = currentPos === targetPos ? 0 : requestAnimationFrame(render); }
+  const scrollRange = () => pin.offsetHeight - window.innerHeight;
+  // Dwell on each card for most of its scroll segment, sliding only in the middle 44% so cards rest fully in view.
+  const smooth = t => t * t * (3 - 2 * t);
+  function toPosition(progress) { const raw = progress * last; const i = Math.floor(raw); if (i >= last) return last; const t = Math.min(1, Math.max(0, (raw - i - .28) / .44)); return i + smooth(t); }
+  function updateScroll() { tickPending = false; if (isRailScroll()) return; const progress = Math.min(1, Math.max(0, -pin.getBoundingClientRect().top / scrollRange())); targetPos = toPosition(progress); if (reducedMotion.matches) currentPos = targetPos; if (!rafId) rafId = requestAnimationFrame(render); }
   let tickPending = false;
-  function updateScroll() { tickPending = false; if (window.innerWidth <= 560 || reducedMotion.matches) return; const target = window.innerHeight * .55; let best = selectedStep; let distance = Infinity; for (let i = 0; i < steps.length; i++) { const rect = steps[i].getBoundingClientRect(); const d = Math.abs(rect.top + rect.height / 2 - target); if (d < distance) { best = i; distance = d; } } const bounds = document.querySelector('.walkthrough-layout').getBoundingClientRect(); if (bounds.top < target && bounds.bottom > target && best !== selectedStep) selectStep(best); }
   window.addEventListener('scroll', () => { if (!tickPending) { tickPending = true; requestAnimationFrame(updateScroll); } }, { passive: true });
+  window.addEventListener('resize', () => { if (isRailScroll()) { stepsTrack.style.transform = ''; rail.style.setProperty('--p', (selectedStep / last).toFixed(4)); } else updateScroll(); });
+  rail.addEventListener('scroll', () => { if (!isRailScroll()) return; const index = Math.min(last, Math.max(0, Math.round(rail.scrollLeft / stepPitch()))); if (index !== selectedStep) selectStep(index); rail.style.setProperty('--p', (index / last).toFixed(4)); }, { passive: true });
+  steps.forEach((step, index) => step.querySelector('button').addEventListener('click', () => { const behavior = reducedMotion.matches ? 'instant' : 'smooth'; if (isRailScroll()) { rail.scrollTo({ left: steps[index].offsetLeft, behavior }); document.querySelector('.step-visual').scrollIntoView({ behavior, block: 'start' }); } else { window.scrollTo({ top: window.scrollY + pin.getBoundingClientRect().top + index / last * scrollRange(), behavior }); } }));
+  updateScroll();
 
   const track = document.querySelector('.screens-track');
   const previous = document.querySelector('#screens-prev');
