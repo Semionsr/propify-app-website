@@ -61,3 +61,62 @@
   const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-in'); observer.unobserve(entry.target); } }), { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
   document.querySelectorAll('[data-reveal], [data-motion]').forEach(el => observer.observe(el));
 })();
+
+// Background: curved light streams that drift with scroll.
+// Perf: soft glow on a low-res canvas, crisp lines on a second canvas, edge shading done by a CSS mask,
+// full frame rate only while scrolling (so lines track the page), ~30fps when idle, paused when hidden.
+(() => {
+  const lines = document.getElementById('light-stream');
+  if (!lines) return;
+  const glow = document.createElement('canvas');
+  glow.id = 'light-stream-glow'; glow.setAttribute('aria-hidden', 'true');
+  lines.before(glow);
+  const opts = { alpha: true, desynchronized: true };
+  const lctx = lines.getContext('2d', opts), gctx = glow.getContext('2d', opts);
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const LINE_SCALE = Math.min(window.devicePixelRatio || 1, 1.25), GLOW_SCALE = 0.35, COUNT = 28, IDLE_FRAME = 1000 / 30;
+  const hues = Array.from({ length: COUNT }, (_, i) => i % 7 === 0 ? '64,214,196' : '72,219,138');
+  let W, H, last = 0, queued = false, scrollingUntil = 0;
+  function resize() {
+    W = innerWidth; H = innerHeight;
+    lines.width = Math.round(W * LINE_SCALE); lines.height = Math.round(H * LINE_SCALE);
+    glow.width = Math.round(W * GLOW_SCALE); glow.height = Math.round(H * GLOW_SCALE);
+    lctx.setTransform(LINE_SCALE, 0, 0, LINE_SCALE, 0, 0); gctx.setTransform(GLOW_SCALE, 0, 0, GLOW_SCALE, 0, 0);
+    lctx.lineJoin = gctx.lineJoin = 'round';
+  }
+  function path(ctx, i, t, scroll) {
+    ctx.beginPath();
+    for (let y = -20; y < H + 20; y += 18) {
+      const world = y + scroll, phase = world / (H * 1.3);
+      const center = W * (.69 + .35 * Math.cos(phase * 3.4 + .5));
+      const spread = 45 + Math.pow(Math.sin(phase * 2.2 + 1), 2) * 110;
+      const x = center + Math.sin(i * 1.81 + world * .0017 + t * .22) * spread + (i - COUNT / 2) * 4 + Math.sin(world * .004 + i * .22 + t * .17) * 15;
+      y === -20 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+  }
+  function draw(now) {
+    queued = false;
+    if (document.hidden) return;
+    const scrolling = now < scrollingUntil;
+    if (!scrolling && !reduced && now - last < IDLE_FRAME) { schedule(); return; }
+    last = now;
+    const t = now * .001, scroll = window.scrollY;
+    gctx.clearRect(0, 0, W, H); lctx.clearRect(0, 0, W, H);
+    gctx.globalCompositeOperation = lctx.globalCompositeOperation = 'lighter';
+    gctx.lineWidth = 30;
+    for (let i = 0; i < COUNT; i++) {
+      path(gctx, i, t, scroll);
+      gctx.strokeStyle = `rgba(${hues[i]},${.045 + (i % 4) * .01})`; gctx.stroke();
+      path(lctx, i, t, scroll);
+      lctx.lineWidth = i % 6 === 0 ? 1.6 : .8;
+      lctx.strokeStyle = `rgba(${hues[i]},${.3 + (Math.sin(i * 3.1 + t * .3) + 1) * .2})`; lctx.stroke();
+    }
+    if (!reduced || scrolling) schedule();
+  }
+  function schedule() { if (!queued) { queued = true; requestAnimationFrame(draw); } }
+  resize();
+  addEventListener('resize', () => { resize(); schedule(); });
+  addEventListener('scroll', () => { scrollingUntil = performance.now() + 200; schedule(); }, { passive: true });
+  document.addEventListener('visibilitychange', schedule);
+  schedule();
+})();
